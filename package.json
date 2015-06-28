@@ -1,0 +1,33 @@
+{
+  "name": "CreativEngine Development Utilities",
+  "description": "A collection of development utilities such as gulp-based less/js compilation and minification that are geared towards the CreativEngine development environment",
+  "version": "0.0.1",
+  "private": true,
+  "author": "Clint Conklin",
+  "homepage": "",
+  "contributors": [
+    "Clint Conklin <clint@creativengine.com>"
+  ],
+  "bugs": {
+    "url": ""
+  },
+  "scripts": {},
+  "dependencies": {},
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "gulp-filesize": "0.0.6",
+    "gulp-less": "^3.0.3",
+    "gulp-minify-css": "^1.2.0",
+    "gulp-size": "^1.2.2",
+    "gulp-uglify": "^1.2.0",
+    "gulp-util": "^3.0.6"
+  },
+  "keywords": [],
+  "repository": "",
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://opensource.org/licenses/MIT"
+    }
+  ]
+}
