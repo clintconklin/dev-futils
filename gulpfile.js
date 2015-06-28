@@ -19,15 +19,9 @@ var size = require('gulp-size');
 gulp.task('senx-utils', function() {
     // less files in the themes folder
     gulp.watch('../senator_x/trunk/themes/**/*.less', function (event) {
-        //console.log('LESS event type: ' + event.type); // added, changed, or deleted
-        //console.log('LESS event path: ' + event.path); // The path of the modified file
-
         var pathArray = event.path.split('/');
         var file = pathArray[pathArray.length - 1];
         var dir = event.path.replace(file, '');
-        //console.log('the LESS file is ' + file);
-        //console.log('the LESS dir is ' + dir);
-        //console.log('compliling ' + dir + 'common.less');
 
         // by convention the root compile sheet is common.less
         gulp.src(dir + 'common.less')
@@ -47,9 +41,6 @@ gulp.task('senx-utils', function() {
 
     // js files in the scripts/src folder
     gulp.watch('../senator_x/trunk/scripts/src/**/*.js', function (event) {
-        //console.log('JS event type: ' + event.type); // added, changed, or deleted
-        //console.log('JS event path: ' + event.path); // The path of the modified file
-
         var pathArray = event.path.split('/');
         var file = pathArray[pathArray.length - 1];
         var dir = event.path.replace(file, '');

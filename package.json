@@ -1,5 +1,5 @@
 {
-  "name": "CreativEngine Development Utilities",
+  "name": "ce-utils",
   "description": "A collection of development utilities such as gulp-based less/js compilation and minification that are geared towards the CreativEngine development environment",
   "version": "0.0.1",
   "private": true,
