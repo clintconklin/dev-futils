@@ -1,3 +1,4 @@
+// TODO: arguments/environments
 var fs = require('fs');
 var path = require('path');
 
@@ -23,20 +24,24 @@ gulp.task('senx-utils', function() {
         var file = pathArray[pathArray.length - 1];
         var dir = event.path.replace(file, '');
 
-        // by convention the root compile sheet is common.less
-        gulp.src(dir + 'common.less')
-        .pipe(less())
-        .pipe(size({
-            'title': 'senx-utils: less pre-css minify',
-            'showFiles': true
-        })) // filesize pre-minify css
-        .pipe(mincss())
-        .pipe(gulp.dest(dir + '../'))
-        .pipe(size({
-            'title': 'senx-utils: less post-css minify',
-            'showFiles': true
-        })) // filesize post-minify css
-        .on('error', gutil.log);
+        try {
+            // by convention the root compile sheet is common.less
+            gulp.src(dir + 'common.less')
+            .pipe(less())
+            .pipe(size({
+                'title': 'senx-utils: less pre-css minify',
+                'showFiles': true
+            })) // filesize pre-minify css
+            .pipe(mincss())
+            .pipe(gulp.dest(dir + '../'))
+            .pipe(size({
+                'title': 'senx-utils: less post-css minify',
+                'showFiles': true
+            })) // filesize post-minify css
+            .on('error', gutil.log);
+        } catch (e) {
+            console.log(e.name + ' -> ' + e.message);
+        }
     });
 
     // js files in the scripts/src folder
@@ -45,17 +50,21 @@ gulp.task('senx-utils', function() {
         var file = pathArray[pathArray.length - 1];
         var dir = event.path.replace(file, '');
 
-        gulp.src(event.path)
-        .pipe(size({
-            'title': 'senx-utils: js pre-uglify',
-            'showFiles': true
-        })) // filesize pre-uglify
-        .pipe(uglify())
-        .pipe(gulp.dest(dir.replace('/src', '')))
-        .pipe(size({
-            'title': 'senx-utils: js post-uglify',
-            'showFiles': true
-        })) // filesize post-uglify
-        .on('error', gutil.log)
+        try {
+            gulp.src(event.path)
+            .pipe(size({
+                'title': 'senx-utils: js pre-uglify',
+                'showFiles': true
+            })) // filesize pre-uglify
+            .pipe(uglify())
+            .pipe(gulp.dest(dir.replace('/src', '')))
+            .pipe(size({
+                'title': 'senx-utils: js post-uglify',
+                'showFiles': true
+            })) // filesize post-uglify
+            .on('error', gutil.log)
+        } catch (e) {
+            console.log(e.name + ' -> ' + e.message);
+        }
     });
 });
