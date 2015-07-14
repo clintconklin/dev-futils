@@ -1,4 +1,4 @@
-// TODO: arguments/environments
+// TODO: environments, to specify the webroot or whatever, and arguments, so we can run ce-utils [folder name in the webroot]
 var fs = require('fs');
 var path = require('path');
 
@@ -19,7 +19,7 @@ var size = require('gulp-size');
 
 gulp.task('senx-utils', function() {
     // less files in the themes folder
-    gulp.watch('../senator_x/trunk/themes/**/*.less', function (event) {
+    gulp.watch('../senx/trunk/themes/**/*.less', function (event) {
         var pathArray = event.path.split('/');
         var file = pathArray[pathArray.length - 1];
         var dir = event.path.replace(file, '');
@@ -45,7 +45,7 @@ gulp.task('senx-utils', function() {
     });
 
     // js files in the scripts/src folder
-    gulp.watch('../senator_x/trunk/scripts/src/**/*.js', function (event) {
+    gulp.watch('../senx/trunk/scripts/src/**/*.js', function (event) {
         var pathArray = event.path.split('/');
         var file = pathArray[pathArray.length - 1];
         var dir = event.path.replace(file, '');
