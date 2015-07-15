@@ -33,9 +33,6 @@ var defaults = {
             "getDest": function(dir) {
                 return dir.replace('/src', '');
             },
-            "getName": function(file) {
-                return file;
-            },
             "glob": "scripts/src/**/*.js"
         },
         "less": {
@@ -117,7 +114,8 @@ gulp.task('ce-utils', function(env) {
                             gutil.log(gutil.colors.red('uglification error: '), e.message);
                             this.emit('end');
                         })
-                        .pipe(rename(env.js.getName(file)))
+                        //.pipe(rename(env.js.getName(file)))
+                        .pipe(typeof env.js.getName === 'function' ? rename(env.js.getName(file)) : gutil.noop())
                         .pipe(gulp.dest(env.js.getDest(dir)))
                         .pipe(size({
                             'title': 'ce-utils: js post-uglify',
