@@ -1,8 +1,3 @@
-/*
-    TODO:
-        - more robust error handling
-*/
-
 var fs = require('fs');
 var path = require('path');
 
@@ -85,6 +80,10 @@ gulp.task('ce-utils', function(env) {
                         // by convention the root compile sheet is common.less
                         gulp.src(dir + env.less.target)
                         .pipe(less())
+                        .on('error', function(e) {
+                            console.log('LESS compilation error: ' + e.message);
+                            this.emit('end');
+                        })
                         .pipe(size({
                             'title': 'ce-utils: less pre-css minify',
                             'showFiles': true
@@ -115,6 +114,10 @@ gulp.task('ce-utils', function(env) {
                             'showFiles': true
                         })) // filesize pre-uglify
                         .pipe(uglify())
+                        .on('error', function(e) {
+                            console.log('uglification error: ' + e.message);
+                            this.emit('end');
+                        })
                         .pipe(rename(env.js.getName(file)))
                         .pipe(gulp.dest(env.js.getDest(dir)))
                         .pipe(size({
