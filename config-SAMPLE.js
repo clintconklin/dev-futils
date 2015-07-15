@@ -7,6 +7,9 @@ var config = function() {
                 "getDest": function(dir) {
                     return dir.replace('/src', '');
                 },
+                "getName": function(file) {
+                    return file;
+                },
                 "glob": "scripts/src/**/*.js"
             },
             "less": {
