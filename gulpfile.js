@@ -1,7 +1,6 @@
 var fs = require('fs');
 var path = require('path');
 
-//var gulp = require('gulp');
 var gulp = require('gulp-param')(require('gulp'), process.argv);
 var gutil = require('gulp-util');
 var rename = require("gulp-rename");
