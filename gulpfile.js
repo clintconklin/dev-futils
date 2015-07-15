@@ -1,9 +1,15 @@
+/*
+    TODO:
+        - more robust error handling
+*/
+
 var fs = require('fs');
 var path = require('path');
 
 //var gulp = require('gulp');
 var gulp = require('gulp-param')(require('gulp'), process.argv);
 var gutil = require('gulp-util');
+var rename = require("gulp-rename");
 var merge = require('merge')
 
 var less = require('gulp-less');
@@ -12,21 +18,38 @@ var uglify = require('gulp-uglify');
 var size = require('gulp-size');
 
 var defaults = {
+    "amend-tinymce": {
+        "name": "Amend - tinymce plugins",
+        "root": "/Applications/ColdFusion11/cfusion/wwwroot/amend/branches/v3.5/script/tinymce/jscripts/tiny_mce/plugins/",
+        "js": {
+            "getDest": function(dir) {
+                return dir;
+            },
+            "getName": function(file) {
+                return file.replace('_src', '');
+            },
+            "glob": "**/editor_plugin_src.js"
+        },
+        "less": null
+    },
     "senx": {
         "name": "Senator X",
         "root": "/Applications/ColdFusion11/cfusion/wwwroot/senator_x/trunk/",
         "js": {
-            "getDest": function(path) {
-                return path.replace('/src', '');
+            "getDest": function(dir) {
+                return dir.replace('/src', '');
+            },
+            "getName": function(file) {
+                return file;
             },
             "glob": "scripts/src/**/*.js"
         },
         "less": {
-            "getDest": function(path) {
-                return path + '../';
+            "getDest": function(dir) {
+                return dir + '../';
             },
             "glob": "themes/**/*.less",
-            "target": "common.less" // the file to compile
+            "target": "common.less"
         }
     }
 };
@@ -74,7 +97,7 @@ gulp.task('ce-utils', function(env) {
                         })) // filesize post-minify css
                         .on('error', gutil.log);
                     } catch (e) {
-                        console.log(e.name + ' -> ' + e.message);
+                        console.log('ERROR: ' + e.name + ' -> ' + e.message);
                     }
                 });
             }
@@ -92,6 +115,7 @@ gulp.task('ce-utils', function(env) {
                             'showFiles': true
                         })) // filesize pre-uglify
                         .pipe(uglify())
+                        .pipe(rename(env.js.getName(file)))
                         .pipe(gulp.dest(env.js.getDest(dir)))
                         .pipe(size({
                             'title': 'ce-utils: js post-uglify',
@@ -99,7 +123,7 @@ gulp.task('ce-utils', function(env) {
                         })) // filesize post-uglify
                         .on('error', gutil.log)
                     } catch (e) {
-                        console.log(e.name + ' -> ' + e.message);
+                        console.log('ERROR: ' + e.name + ' -> ' + e.message);
                     }
                 });
             }

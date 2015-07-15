@@ -19,6 +19,6 @@ Alternately, you can add an alias to your .bash_profile/.bashrc like so (the exa
 
 Then invoke via `ce-utils --env [environment]`; e.g. `ce-utils -env senx`
 
-Note that for now the only included environment is `senx`; for custom environment configuration, rename the included `config-SAMPLE.js` as `config.js` and modify as needed
+Note that for now the only included environments are `senx` and `amend-tinymce`; for custom environment configuration, rename the included `config-SAMPLE.js` as `config.js` and modify as needed
 
 That's it!
