@@ -52,7 +52,7 @@ gulp.task('ce-utils', function(env) {
             env = config[env];
             console.log('Environment successfully set to ' + env.name);
 
-            if (typeof env.less != 'undefined' && env.less) { console.log('watching ' + env.root + env.less.glob);
+            if (typeof env.less != 'undefined' && env.less) {
                 gulp.watch(env.root + env.less.glob, function (event) {
                     var pathArray = event.path.split('/');
                     var file = pathArray[pathArray.length - 1];
