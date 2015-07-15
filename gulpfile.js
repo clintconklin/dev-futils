@@ -53,10 +53,10 @@ var config = null;
 try {
     var localConfig = require('./config.js');
     config = merge(defaults, localConfig.config());
-    console.log('Successfully loaded config.json and merged with the defaults.');
-} catch (e) { console.dir(e);
+    gutil.log(gutil.colors.blue('Notice: '), 'Successfully loaded config.json and merged with the defaults.');
+} catch (e) {
     if (e instanceof Error && e.code === "MODULE_NOT_FOUND") {
-        console.log("No config file present, using defaults.");
+        gutil.log(gutil.colors.blue('Notice: '), 'No config file present, using defaults.');
         config = defaults;
     } else {
         throw e;
@@ -67,7 +67,7 @@ gulp.task('ce-utils', function(env) {
     if (env) {
         if (typeof config[env] != 'undefined') {
             env = config[env];
-            console.log('Environment successfully set to ' + env.name);
+            gutil.log(gutil.colors.blue('Notice: '), 'Environment successfully set to ' + env.name);
 
             if (typeof env.less != 'undefined' && env.less) {
                 gulp.watch(env.root + env.less.glob, function (event) {
@@ -80,7 +80,7 @@ gulp.task('ce-utils', function(env) {
                         gulp.src(dir + env.less.target)
                         .pipe(less())
                         .on('error', function(e) {
-                            console.log('LESS compilation error: ' + e.message);
+                            gutil.log(gutil.colors.red('LESS compilation error: '), e.message);
                             this.emit('end');
                         })
                         .pipe(size({
@@ -95,7 +95,7 @@ gulp.task('ce-utils', function(env) {
                         })) // filesize post-minify css
                         .on('error', gutil.log);
                     } catch (e) {
-                        console.log('ERROR: ' + e.name + ' -> ' + e.message);
+                        gutil.log(gutil.colors.red('Error: '), e.message);
                     }
                 });
             }
@@ -114,7 +114,7 @@ gulp.task('ce-utils', function(env) {
                         })) // filesize pre-uglify
                         .pipe(uglify())
                         .on('error', function(e) {
-                            console.log('uglification error: ' + e.message);
+                            gutil.log(gutil.colors.red('uglification error: '), e.message);
                             this.emit('end');
                         })
                         .pipe(rename(env.js.getName(file)))
@@ -125,15 +125,15 @@ gulp.task('ce-utils', function(env) {
                         })) // filesize post-uglify
                         .on('error', gutil.log)
                     } catch (e) {
-                        console.log('ERROR: ' + e.name + ' -> ' + e.message);
+                        gutil.log(gutil.colors.red('Error: '), e.message);
                     }
                 });
             }
         } else {
-            console.log('Couldn\'t find the \'' + env + '\' environment... exiting');
+            gutil.log(gutil.colors.red('Error: '), 'Couldn\'t find the \'' + env + '\' environment... exiting');
         }
     } else {
-        console.log('Please specify an evironment; e.g. --env senx\nExiting...');
+        gutil.log(gutil.colors.red('Error: '), 'Please specify an evironment; e.g. --env senx\nExiting...');
     }
 });
 
