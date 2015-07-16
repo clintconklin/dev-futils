@@ -45,9 +45,8 @@ var defaults = {
     }
 };
 
-// load the config if it's present
 var config = null;
-try {
+try { // load the config if it's present
     var localConfig = require('./config.js');
     config = merge(defaults, localConfig.config());
     gutil.log(gutil.colors.blue('Notice: '), 'Successfully loaded config.json and merged with the defaults.');
