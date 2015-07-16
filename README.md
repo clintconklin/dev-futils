@@ -6,7 +6,7 @@ A gulp-based less/js compilation and minification utility that's geared towards 
 
 1. Clone the repo
 2. If you don't have it already, install npm via the node install @ https://nodejs.org/
-3. Make sure gulp is installed globally: `npm install -g gulp`; note that while `sudo` is fine for gulp, as a general practice [you really shouldn't use it to install modules globally](https://docs.npmjs.com/getting-started/fixing-npm-permissions).
+3. Make sure gulp is installed globally: `npm install -g gulp`; note that while `sudo` is fine for gulp, as a general practice [you really shouldn't use it to install modules globally](https://docs.npmjs.com/getting-started/fixing-npm-permissions)
 4. From the repo directory, run `npm install`
 
 ## Running
@@ -21,9 +21,9 @@ Which will enable you to simply type `ce-utils [args]` without navigating to the
 
 ### Arguments
 
-`--help` - lists all available arguments.
+`--help` - lists all available arguments
 
-`--list` - lists all available environments.
+`--list` - lists all available environments
 
 `--env [environment]` - loads the specified environment, e.g. `--env senx`
 
