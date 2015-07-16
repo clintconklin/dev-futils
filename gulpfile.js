@@ -49,10 +49,10 @@ var config = null;
 try { // load the config if it's present
     var localConfig = require('./config.js');
     config = merge(defaults, localConfig.config());
-    gutil.log(gutil.colors.blue('Notice: '), 'Successfully loaded config.json and merged with the defaults.');
+    gutil.log(gutil.colors.blue('Notice: '), 'Successfully loaded config.js and merged with the defaults.');
 } catch (e) {
     if (e instanceof Error && e.code === "MODULE_NOT_FOUND") {
-        gutil.log(gutil.colors.blue('Notice: '), 'No config file present, using defaults.');
+        gutil.log(gutil.colors.blue('Notice: '), 'No config.js file present, using defaults.');
         config = defaults;
     } else {
         throw e;
@@ -125,7 +125,7 @@ var setWatch = function(env) {
     }
 };
 
-gulp.task('ce-utils', function(env, all, list, help) {
+gulp.task('ce-utils', function(help, list, all, env) {
     if (help) {
         gutil.log(gutil.colors.blue('List of available options:'));
         gutil.log(gutil.colors.blue('--list'), ' - lists all available environments');
