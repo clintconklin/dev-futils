@@ -13,8 +13,14 @@ var config = function() {
                 "getDest": function(dir) {
                     return dir + '../';
                 },
-                "glob": "themes/**/*.less",
-                "target": "common.less"
+                "getTarget": function(dir) {
+                    if (dir.indexOf('themes/vitter') !== -1) { // target file is bootstrap.less, and some less files are in an /amend subdirectory
+                        return dir.replace(/\/amend/i, '') + 'bootstrap.less';
+                    } else {
+                        return dir + 'common.less';
+                    }
+                },
+                "glob": "themes/**/*.less"
             }
         }
     }

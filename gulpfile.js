@@ -39,8 +39,14 @@ var defaults = {
             "getDest": function(dir) {
                 return dir + '../';
             },
-            "glob": "themes/**/*.less",
-            "target": "common.less"
+            "getTarget": function(dir) {
+                if (dir.indexOf('themes/vitter') !== -1) { // target file is bootstrap.less, and some less files are in an /amend subdirectory
+                    return dir.replace(/\/amend/i, '') + 'bootstrap.less';
+                } else {
+                    return dir + 'common.less';
+                }
+            },
+            "glob": "themes/**/*.less"
         }
     }
 };
@@ -69,8 +75,7 @@ var setWatch = function(env) {
             var dir = event.path.replace(file, '');
 
             try {
-                // by convention the root compile sheet is common.less
-                gulp.src(dir + env.less.target)
+                gulp.src(env.less.getTarget(dir))
                 .pipe(less())
                 .on('error', function(e) {
                     gutil.log(gutil.colors.red('LESS compilation error: '), e.message);
