@@ -6,7 +6,8 @@ A gulp-based less/js compilation and minification utility that's geared towards 
 
 1. Clone the repo
 2. If you don't have it already, install npm via the node install @ https://nodejs.org/
-3. From the repo directory, run `npm install`
+3. Make sure gulp is installed globally: `npm install -g gulp`; note that while `sudo` is fine for gulp, as a general practice [you really shouldn't use it to install modules globally](https://docs.npmjs.com/getting-started/fixing-npm-permissions).
+4. From the repo directory, run `npm install`
 
 ## Running
 
