@@ -60,135 +60,98 @@ try {
     }
 }
 
-gulp.task('ce-utils', function(env) {
-    if (env) {
+var setWatch = function(env) {
+    gutil.log(gutil.colors.blue('Notice: '), 'Environment successfully set to ' + env.name);
+
+    if (typeof env.less != 'undefined' && env.less) {
+        gulp.watch(env.root + env.less.glob, function (event) {
+            var pathArray = event.path.split('/');
+            var file = pathArray[pathArray.length - 1];
+            var dir = event.path.replace(file, '');
+
+            try {
+                // by convention the root compile sheet is common.less
+                gulp.src(dir + env.less.target)
+                .pipe(less())
+                .on('error', function(e) {
+                    gutil.log(gutil.colors.red('LESS compilation error: '), e.message);
+                    this.emit('end');
+                })
+                .pipe(size({
+                    'title': 'ce-utils: less pre-css minify',
+                    'showFiles': true
+                })) // filesize pre-minify css
+                .pipe(mincss())
+                .pipe(gulp.dest(env.less.getDest(dir)))
+                .pipe(size({
+                    'title': 'ce-utils: less post-css minify',
+                    'showFiles': true
+                })) // filesize post-minify css
+                .on('error', gutil.log);
+            } catch (e) {
+                gutil.log(gutil.colors.red('Error: '), e.message);
+            }
+        });
+    }
+
+    if (typeof env.js != 'undefined' && env.js) {
+        gulp.watch(env.root + env.js.glob, function (event) {
+            var pathArray = event.path.split('/');
+            var file = pathArray[pathArray.length - 1];
+            var dir = event.path.replace(file, '');
+
+            try {
+                gulp.src(event.path)
+                .pipe(size({
+                    'title': 'ce-utils: js pre-uglify',
+                    'showFiles': true
+                })) // filesize pre-uglify
+                .pipe(uglify())
+                .on('error', function(e) {
+                    gutil.log(gutil.colors.red('uglification error: '), e.message);
+                    this.emit('end');
+                })
+                //.pipe(rename(env.js.getName(file)))
+                .pipe(typeof env.js.getName === 'function' ? rename(env.js.getName(file)) : gutil.noop())
+                .pipe(gulp.dest(env.js.getDest(dir)))
+                .pipe(size({
+                    'title': 'ce-utils: js post-uglify',
+                    'showFiles': true
+                })) // filesize post-uglify
+                .on('error', gutil.log)
+            } catch (e) {
+                gutil.log(gutil.colors.red('Error: '), e.message);
+            }
+        });
+    }
+};
+
+gulp.task('ce-utils', function(env, all, list, help) {
+    if (help) {
+        gutil.log(gutil.colors.blue('List of available options:'));
+        gutil.log(gutil.colors.blue('--list'), ' - lists all available environments');
+        gutil.log(gutil.colors.blue('--env [environment]'), ' - loads the specified environment');
+        gutil.log(gutil.colors.blue('--all'), ' - loads all available environments');
+    } else if (list) {
+        gutil.log(gutil.colors.blue('List of available environments:'));
+        for (env in config) {
+            if (config.hasOwnProperty(env)) {
+                gutil.log(gutil.colors.blue(env), ' - ', config[env].name);
+            }
+        }
+    } else if (all) {
+        for (env in config) {
+            if (config.hasOwnProperty(env)) {
+                setWatch(config[env]);
+            }
+        }
+    } else if (env) {
         if (typeof config[env] != 'undefined') {
-            env = config[env];
-            gutil.log(gutil.colors.blue('Notice: '), 'Environment successfully set to ' + env.name);
-
-            if (typeof env.less != 'undefined' && env.less) {
-                gulp.watch(env.root + env.less.glob, function (event) {
-                    var pathArray = event.path.split('/');
-                    var file = pathArray[pathArray.length - 1];
-                    var dir = event.path.replace(file, '');
-
-                    try {
-                        // by convention the root compile sheet is common.less
-                        gulp.src(dir + env.less.target)
-                        .pipe(less())
-                        .on('error', function(e) {
-                            gutil.log(gutil.colors.red('LESS compilation error: '), e.message);
-                            this.emit('end');
-                        })
-                        .pipe(size({
-                            'title': 'ce-utils: less pre-css minify',
-                            'showFiles': true
-                        })) // filesize pre-minify css
-                        .pipe(mincss())
-                        .pipe(gulp.dest(env.less.getDest(dir)))
-                        .pipe(size({
-                            'title': 'ce-utils: less post-css minify',
-                            'showFiles': true
-                        })) // filesize post-minify css
-                        .on('error', gutil.log);
-                    } catch (e) {
-                        gutil.log(gutil.colors.red('Error: '), e.message);
-                    }
-                });
-            }
-
-            if (typeof env.js != 'undefined' && env.js) {
-                gulp.watch(env.root + env.js.glob, function (event) {
-                    var pathArray = event.path.split('/');
-                    var file = pathArray[pathArray.length - 1];
-                    var dir = event.path.replace(file, '');
-
-                    try {
-                        gulp.src(event.path)
-                        .pipe(size({
-                            'title': 'ce-utils: js pre-uglify',
-                            'showFiles': true
-                        })) // filesize pre-uglify
-                        .pipe(uglify())
-                        .on('error', function(e) {
-                            gutil.log(gutil.colors.red('uglification error: '), e.message);
-                            this.emit('end');
-                        })
-                        //.pipe(rename(env.js.getName(file)))
-                        .pipe(typeof env.js.getName === 'function' ? rename(env.js.getName(file)) : gutil.noop())
-                        .pipe(gulp.dest(env.js.getDest(dir)))
-                        .pipe(size({
-                            'title': 'ce-utils: js post-uglify',
-                            'showFiles': true
-                        })) // filesize post-uglify
-                        .on('error', gutil.log)
-                    } catch (e) {
-                        gutil.log(gutil.colors.red('Error: '), e.message);
-                    }
-                });
-            }
+            setWatch(config[env]);
         } else {
             gutil.log(gutil.colors.red('Error: '), 'Couldn\'t find the \'' + env + '\' environment... exiting');
         }
     } else {
-        gutil.log(gutil.colors.red('Error: '), 'Please specify an evironment; e.g. --env senx\nExiting...');
+        gutil.log(gutil.colors.red('Error: '), 'Please specify an evironment; e.g. --env senx, or use the --all argument.\nExiting...');
     }
-});
-
-/*  DEPRECATED, BUT STILL WORKS
-    NOTE: globbing the entire webroot directory for both less and js results in a 'maximum call
-    stack size exceeded' error, so the watch tasks are now grouped by project; this has the added
-    benefit that we don't need to check for common.less vs. theme.less or whatever, since the
-    filenames are by convention project-specific
-*/
-gulp.task('senx-utils', function(env) {
-    // less files in the themes folder
-    gulp.watch('../senx/trunk/themes/**/*.less', function (event) {
-        var pathArray = event.path.split('/');
-        var file = pathArray[pathArray.length - 1];
-        var dir = event.path.replace(file, '');
-
-        try {
-            // by convention the root compile sheet is common.less
-            gulp.src(dir + 'common.less')
-            .pipe(less())
-            .pipe(size({
-                'title': 'senx-utils: less pre-css minify',
-                'showFiles': true
-            })) // filesize pre-minify css
-            .pipe(mincss())
-            .pipe(gulp.dest(dir + '../'))
-            .pipe(size({
-                'title': 'senx-utils: less post-css minify',
-                'showFiles': true
-            })) // filesize post-minify css
-            .on('error', gutil.log);
-        } catch (e) {
-            console.log(e.name + ' -> ' + e.message);
-        }
-    });
-
-    // js files in the scripts/src folder
-    gulp.watch('../senx/trunk/scripts/src/**/*.js', function (event) {
-        var pathArray = event.path.split('/');
-        var file = pathArray[pathArray.length - 1];
-        var dir = event.path.replace(file, '');
-
-        try {
-            gulp.src(event.path)
-            .pipe(size({
-                'title': 'senx-utils: js pre-uglify',
-                'showFiles': true
-            })) // filesize pre-uglify
-            .pipe(uglify())
-            .pipe(gulp.dest(dir.replace('/src', '')))
-            .pipe(size({
-                'title': 'senx-utils: js post-uglify',
-                'showFiles': true
-            })) // filesize post-uglify
-            .on('error', gutil.log)
-        } catch (e) {
-            console.log(e.name + ' -> ' + e.message);
-        }
-    });
 });

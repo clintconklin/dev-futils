@@ -11,15 +11,22 @@ A gulp-based less/js compilation and minification utility that's geared towards 
 
 ## Running
 
-1. Navigate to the cloned directory
-2. Type `gulp ce-utils --env [environment]`; e.g. `gulp ce-utils -env senx`
+Navigate to the cloned directory, and type `gulp ce-utils [args]`
 
-Alternately, you can add an alias to your .bash_profile/.bashrc like so (the example below assumes you've cloned the ce-utils folder into your user directory):
+Alternately, add an alias to your .bash_profile like so (the example below assumes you've cloned the ce-utils folder into your user directory):
 
 `alias ce-utils='cd ~/ce-utils/;gulp ce-utils'`
 
-Then invoke via `ce-utils --env [environment]`; e.g. `ce-utils -env senx`
+Which will enable you to simply type `ce-utils [args]` without navigating to the cloned directory.
 
-Note that for now the only included environments are `senx` and `amend-tinymce`; for custom environment configuration, rename the included `config-SAMPLE.js` as `config.js` and modify as needed
+### Arguments
 
-That's it!
+`--help` - lists all available arguments.
+
+`--list` - lists all available environments.
+
+`--env [environment]` - loads the specified environment, e.g. `--env senx`
+
+`--all` - loads all available enviromnents
+
+**NOTE:** depending on the scope of the glob patterns in the environments specified in the config, you might see a 'maximum call stack size exceeded' error when using the `--all` argument. If you do, either refine the glob pattern to target a smaller number of files, or fall back to the `--env [environment]` argument.
