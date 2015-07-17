@@ -135,18 +135,31 @@ var setWatch = function(env) {
 
 gulp.task('ce-utils', function(help, list, all, env, dev) {
     if (help) {
-        gutil.log(gutil.colors.blue('List of available options:'));
-        gutil.log(gutil.colors.blue('--list'), ' - lists all available environments');
-        gutil.log(gutil.colors.blue('--env [environment]'), ' - loads the specified environment');
-        gutil.log(gutil.colors.blue('--all'), ' - loads all available environments');
-        gutil.log(gutil.colors.blue('--dev'), ' - generates an inline less sourcemap when passed with either --env or --all');
+        gutil.log(
+            gutil.colors.blue('Here\s a listng of all available options:\n\n'),
+
+            gutil.colors.blue('\t--list'),
+            ' - lists all available environments\n',
+
+            gutil.colors.blue('\t--env [environment]'),
+            ' - loads the specified environment\n',
+
+            gutil.colors.blue('\t--all'),
+            ' - loads all available environments\n',
+
+            gutil.colors.blue('\t--dev'),
+            ' - generates an inline less sourcemap when passed with either --env or --all\n'
+        );
     } else if (list) {
-        gutil.log(gutil.colors.blue('List of available environments:'));
+        var msg = gutil.colors.blue('Here\'s a listing of all available environments:') + '\n\n';
+
         for (env in config) {
             if (config.hasOwnProperty(env)) {
-                gutil.log(gutil.colors.blue(env), ' - ', config[env].name);
+                msg += '\t' + gutil.colors.blue(env) + ' - ' + config[env].name + '\n';
             }
         }
+
+        gutil.log(msg);
     } else if (all) {
         for (env in config) {
             if (config.hasOwnProperty(env)) {
