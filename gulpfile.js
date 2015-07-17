@@ -136,19 +136,22 @@ var setWatch = function(env) {
 gulp.task('ce-utils', function(help, list, all, env, dev) {
     if (help) {
         gutil.log(
-            gutil.colors.blue('Here\s a listng of all available options:\n\n'),
+            gutil.colors.blue('Here\s a listng of all available arguments:\n\n'),
+
+            gutil.colors.blue('\t--help'),
+            '- ./\n',
 
             gutil.colors.blue('\t--list'),
-            ' - lists all available environments\n',
+            '- lists all available environments\n',
 
             gutil.colors.blue('\t--env [environment]'),
-            ' - loads the specified environment\n',
+            '- loads the specified environment\n',
 
             gutil.colors.blue('\t--all'),
-            ' - loads all available environments\n',
+            '- loads all available environments\n',
 
             gutil.colors.blue('\t--dev'),
-            ' - generates an inline less sourcemap when passed with either --env or --all\n'
+            '- generates an inline less sourcemap when passed with either --env or --all\n'
         );
     } else if (list) {
         var msg = gutil.colors.blue('Here\'s a listing of all available environments:') + '\n\n';
