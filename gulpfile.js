@@ -139,6 +139,7 @@ gulp.task('ce-utils', function(help, list, all, env, dev) {
         gutil.log(gutil.colors.blue('--list'), ' - lists all available environments');
         gutil.log(gutil.colors.blue('--env [environment]'), ' - loads the specified environment');
         gutil.log(gutil.colors.blue('--all'), ' - loads all available environments');
+        gutil.log(gutil.colors.blue('--dev'), ' - generates an inline less sourcemap when passed with either --env or --all');
     } else if (list) {
         gutil.log(gutil.colors.blue('List of available environments:'));
         for (env in config) {
