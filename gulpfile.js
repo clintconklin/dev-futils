@@ -166,13 +166,23 @@ gulp.task('ce-utils', function(help, list, all, env, dev) {
     } else if (all) {
         for (env in config) {
             if (config.hasOwnProperty(env)) {
-                config[env].dev = (dev) ? true : false;
+                if (dev) {
+                    config[env].dev = true;
+                    gutil.log(gutil.colors.blue('Notice: '), 'dev mode is enabled');
+                } else {
+                    config[env].dev = false;
+                }
                 setWatch(config[env]);
             }
         }
     } else if (env) {
         if (typeof config[env] != 'undefined') {
-            config[env].dev = (dev) ? true : false;
+            if (dev) {
+                config[env].dev = true;
+                gutil.log(gutil.colors.blue('Notice: '), 'dev mode is enabled');
+            } else {
+                config[env].dev = false;
+            }
             setWatch(config[env]);
         } else {
             gutil.log(gutil.colors.red('Error: '), 'Couldn\'t find the \'' + env + '\' environment... exiting');
