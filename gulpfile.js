@@ -7,6 +7,7 @@ var rename = require("gulp-rename");
 var merge = require('merge')
 
 var less = require('gulp-less');
+var sourcemaps = require('gulp-sourcemaps');
 var mincss = require('gulp-minify-css');
 var uglify = require('gulp-uglify');
 var size = require('gulp-size');
@@ -76,6 +77,7 @@ var setWatch = function(env) {
 
             try {
                 gulp.src(env.less.getTarget(dir))
+                .pipe(typeof env.dev !== 'undefined' && env.dev === true ? sourcemaps.init() : gutil.noop())
                 .pipe(less())
                 .on('error', function(e) {
                     gutil.log(gutil.colors.red('LESS compilation error: '), e.message);
@@ -86,6 +88,7 @@ var setWatch = function(env) {
                     'showFiles': true
                 })) // filesize pre-minify css
                 .pipe(mincss())
+                .pipe(typeof env.dev !== 'undefined' && env.dev === true ? sourcemaps.write() : gutil.noop())
                 .pipe(gulp.dest(env.less.getDest(dir)))
                 .pipe(size({
                     'title': 'ce-utils: less post-css minify',
@@ -130,7 +133,7 @@ var setWatch = function(env) {
     }
 };
 
-gulp.task('ce-utils', function(help, list, all, env) {
+gulp.task('ce-utils', function(help, list, all, env, dev) {
     if (help) {
         gutil.log(gutil.colors.blue('List of available options:'));
         gutil.log(gutil.colors.blue('--list'), ' - lists all available environments');
@@ -146,11 +149,13 @@ gulp.task('ce-utils', function(help, list, all, env) {
     } else if (all) {
         for (env in config) {
             if (config.hasOwnProperty(env)) {
+                config[env].dev = (dev) ? true : false;
                 setWatch(config[env]);
             }
         }
     } else if (env) {
         if (typeof config[env] != 'undefined') {
+            config[env].dev = (dev) ? true : false;
             setWatch(config[env]);
         } else {
             gutil.log(gutil.colors.red('Error: '), 'Couldn\'t find the \'' + env + '\' environment... exiting');

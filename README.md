@@ -27,6 +27,8 @@ Which will enable you to simply type `ce-utils [args]` without navigating to the
 
 `--env [environment]` - loads the specified environment, e.g. `--env senx`
 
-`--all` - loads all available enviromnents
+`--all` - loads all available environments
+
+`--dev` - generates an inline less sourcemap when passed with either `--env` or `--all`, e.g. `ce-utils --all --dev`
 
 **NOTE:** depending on the scope of the glob patterns in the environments specified in the config, you might see a 'maximum call stack size exceeded' error when using the `--all` argument. If you do, either refine the glob pattern to target a smaller number of files, or fall back to the `--env [environment]` argument.
