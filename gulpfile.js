@@ -1,3 +1,9 @@
+/*
+    NEXT: deploy option
+        - less with no dev option
+        - makes SAM call to replace local server
+        - ???
+*/
 var fs = require('fs');
 var path = require('path');
 
@@ -66,8 +72,11 @@ try { // load the config if it's present
     }
 }
 
-var setWatch = function(env) {
-    gutil.log(gutil.colors.blue('Notice: '), 'Environment successfully set to ' + env.name);
+var setWatch = function(id, env) {
+    gutil.log(gutil.colors.blue('Notice: [' + id + ']'), 'Environment successfully set to ' + env.name);
+    if (typeof env.dev !== 'undefined' && env.dev === true) {
+        gutil.log(gutil.colors.blue('Notice [' + id + ']: '), 'dev mode is enabled');
+    }
 
     if (typeof env.less != 'undefined' && env.less) {
         gulp.watch(env.root + env.less.glob, function (event) {
@@ -80,23 +89,23 @@ var setWatch = function(env) {
                 .pipe(typeof env.dev !== 'undefined' && env.dev === true ? sourcemaps.init() : gutil.noop())
                 .pipe(less())
                 .on('error', function(e) {
-                    gutil.log(gutil.colors.red('LESS compilation error: '), e.message);
+                    gutil.log(gutil.colors.red('LESS compilation error [' + id + ']: '), e.message);
                     this.emit('end');
                 })
                 .pipe(size({
-                    'title': 'ce-utils: less pre-css minify',
+                    'title': 'ce-utils [' + id + ']: less pre-css minify',
                     'showFiles': true
                 })) // filesize pre-minify css
                 .pipe(mincss())
                 .pipe(typeof env.dev !== 'undefined' && env.dev === true ? sourcemaps.write() : gutil.noop())
                 .pipe(gulp.dest(env.less.getDest(dir)))
                 .pipe(size({
-                    'title': 'ce-utils: less post-css minify',
+                    'title': 'ce-utils [' + id + ']: less post-css minify',
                     'showFiles': true
                 })) // filesize post-minify css
                 .on('error', gutil.log);
             } catch (e) {
-                gutil.log(gutil.colors.red('Error: '), e.message);
+                gutil.log(gutil.colors.red('Error [' + id + ']: '), e.message);
             }
         });
     }
@@ -110,24 +119,24 @@ var setWatch = function(env) {
             try {
                 gulp.src(event.path)
                 .pipe(size({
-                    'title': 'ce-utils: js pre-uglify',
+                    'title': 'ce-utils[' + id + ']: js pre-uglify',
                     'showFiles': true
                 })) // filesize pre-uglify
                 .pipe(uglify())
                 .on('error', function(e) {
-                    gutil.log(gutil.colors.red('uglification error: '), e.message);
+                    gutil.log(gutil.colors.red('uglification error[' + id + ']: '), e.message);
                     this.emit('end');
                 })
                 //.pipe(rename(env.js.getName(file)))
                 .pipe(typeof env.js.getName === 'function' ? rename(env.js.getName(file)) : gutil.noop())
                 .pipe(gulp.dest(env.js.getDest(dir)))
                 .pipe(size({
-                    'title': 'ce-utils: js post-uglify',
+                    'title': 'ce-utils[' + id + ']: js post-uglify',
                     'showFiles': true
                 })) // filesize post-uglify
                 .on('error', gutil.log)
             } catch (e) {
-                gutil.log(gutil.colors.red('Error: '), e.message);
+                gutil.log(gutil.colors.red('Error[' + id + ']: '), e.message);
             }
         });
     }
@@ -168,22 +177,20 @@ gulp.task('ce-utils', function(help, list, all, env, dev) {
             if (config.hasOwnProperty(env)) {
                 if (dev) {
                     config[env].dev = true;
-                    gutil.log(gutil.colors.blue('Notice: '), 'dev mode is enabled');
                 } else {
                     config[env].dev = false;
                 }
-                setWatch(config[env]);
+                setWatch(env, config[env]);
             }
         }
     } else if (env) {
         if (typeof config[env] != 'undefined') {
             if (dev) {
                 config[env].dev = true;
-                gutil.log(gutil.colors.blue('Notice: '), 'dev mode is enabled');
             } else {
                 config[env].dev = false;
             }
-            setWatch(config[env]);
+            setWatch(env, config[env]);
         } else {
             gutil.log(gutil.colors.red('Error: '), 'Couldn\'t find the \'' + env + '\' environment... exiting');
         }
