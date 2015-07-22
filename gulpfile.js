@@ -2,7 +2,7 @@
     NEXT: deploy option
         - less with no dev option
         - makes SAM call to replace local server
-        - ???
+        - file sync
 */
 var fs = require('fs');
 var path = require('path');
@@ -47,7 +47,7 @@ var defaults = {
                 return dir + '../';
             },
             "getTarget": function(dir) {
-                if (dir.indexOf('themes/vitter') !== -1) { // target file is bootstrap.less, and some less files are in an /amend subdirectory
+                if (dir.indexOf('themes/vitter') !== -1 || dir.indexOf('themes/casey') !== -1) { // target file is bootstrap.less, and some less files are in an /amend subdirectory
                     return dir.replace(/\/amend/i, '') + 'bootstrap.less';
                 } else {
                     return dir + 'common.less';
