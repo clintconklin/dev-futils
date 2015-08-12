@@ -55,6 +55,20 @@ var defaults = {
             },
             "glob": "themes/**/*.less"
         }
+    },
+    "committee-mail": {
+        "name": "Committee Mail",
+        "root": "/Applications/ColdFusion11/cfusion/wwwroot/amend/branches/v3.5.5/content/committee/mail/",
+        "js": null,
+        "less": {
+            "getDest": function(dir) {
+                return dir + '../';
+            },
+            "getTarget": function(dir) {
+                return dir + 'app.less';
+            },
+            "glob": "themes/**/*.less"
+        }
     }
 };
 
@@ -73,7 +87,7 @@ try { // load the config if it's present
 }
 
 var setWatch = function(id, env) {
-    gutil.log(gutil.colors.blue('Notice: [' + id + ']'), 'Environment successfully set to ' + env.name);
+    gutil.log(gutil.colors.blue('Notice: [' + id + ']'), 'Environment successfully set to ', gutil.colors.blue(env.name));
     if (typeof env.dev !== 'undefined' && env.dev === true) {
         gutil.log(gutil.colors.blue('Notice [' + id + ']: '), 'dev mode is enabled');
     }
