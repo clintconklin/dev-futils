@@ -67,7 +67,7 @@ var defaults = {
             "getTarget": function(dir) {
                 return dir + 'app.less';
             },
-            "glob": "themes/**/*.less"
+            "glob": "styles/**/*.less"
         }
     }
 };
