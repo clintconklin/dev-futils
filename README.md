@@ -27,6 +27,8 @@ Which will enable you to simply type `ce-utils [args]` without navigating to the
 
 `--env [environment]` - loads the specified environment, e.g. `--env senx`
 
+`--theme [theme]` - for the senx env, restricts the LESS globbing pattern to that theme, e.g. `--theme senatorx`
+
 `--all` - loads all available environments
 
 `--dev` - generates an inline less sourcemap when passed with either `--env` or `--all`, e.g. `ce-utils --all --dev`

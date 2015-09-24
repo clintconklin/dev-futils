@@ -1,8 +1,6 @@
 /*
-    NEXT: deploy option
-        - less with no dev option
-        - makes SAM call to replace local server
-        - file sync
+    - preliminary SASS
+    - abstract out themes a bit better
 */
 var fs = require('fs');
 var path = require('path');
@@ -10,9 +8,10 @@ var path = require('path');
 var gulp = require('gulp-param')(require('gulp'), process.argv);
 var gutil = require('gulp-util');
 var rename = require("gulp-rename");
-var merge = require('merge')
+var merge = require('merge');
 
 var less = require('gulp-less');
+var sass = require('gulp-sass');
 var sourcemaps = require('gulp-sourcemaps');
 var mincss = require('gulp-minify-css');
 var uglify = require('gulp-uglify');
@@ -33,6 +32,48 @@ var defaults = {
         },
         "less": null
     },
+    "committee-mail": {
+        "name": "Committee Mail",
+        "root": "/Applications/ColdFusion11/cfusion/wwwroot/amend/branches/v3.5.5/content/committee/mail/",
+        "js": null,
+        "less": {
+            "getDest": function(dir) {
+                return dir + '../';
+            },
+            "getTarget": function(dir, file) {
+                return dir + 'app.less';
+            },
+            "glob": "styles/**/*.less"
+        }
+    },
+    "forms": {
+        "name": "Forms",
+        "root": "/Applications/ColdFusion11/cfusion/wwwroot/test/forms/",
+        "js": null,
+        "sass": {
+            "getDest": function(dir) {
+                return dir + '../';
+            },
+            "getTarget": function(dir, file) {
+                return dir + file;
+            },
+            "glob": "styles/**/*.scss"
+        }
+    },
+    "lab": {
+        "name": "LA's BEST",
+        "root": "/Applications/ColdFusion11/cfusion/wwwroot/lasbest/branches/v3/trunk/",
+        "js": null,
+        "less": {
+            "getDest": function(dir) {
+                return dir + '../css/';
+            },
+            "getTarget": function(dir, file) {
+                return dir + file + '.TESTER';
+            },
+            "glob": "styles/**/*.less"
+        }
+    },
     "senx": {
         "name": "Senator X",
         "root": "/Applications/ColdFusion11/cfusion/wwwroot/senator_x/trunk/",
@@ -46,7 +87,7 @@ var defaults = {
             "getDest": function(dir) {
                 return dir + '../';
             },
-            "getTarget": function(dir) {
+            "getTarget": function(dir, file) {
                 if (dir.indexOf('themes/vitter') !== -1 || dir.indexOf('themes/casey') !== -1) { // target file is bootstrap.less, and some less files are in an /amend subdirectory
                     return dir.replace(/\/amend/i, '') + 'bootstrap.less';
                 } else {
@@ -54,20 +95,6 @@ var defaults = {
                 }
             },
             "glob": "themes/**/*.less"
-        }
-    },
-    "committee-mail": {
-        "name": "Committee Mail",
-        "root": "/Applications/ColdFusion11/cfusion/wwwroot/amend/branches/v3.5.5/content/committee/mail/",
-        "js": null,
-        "less": {
-            "getDest": function(dir) {
-                return dir + '../';
-            },
-            "getTarget": function(dir) {
-                return dir + 'app.less';
-            },
-            "glob": "styles/**/*.less"
         }
     }
 };
@@ -86,20 +113,25 @@ try { // load the config if it's present
     }
 }
 
-var setWatch = function(id, env) {
+var setWatch = function(id, env, theme) {
     gutil.log(gutil.colors.blue('Notice: [' + id + ']'), 'Environment successfully set to ', gutil.colors.blue(env.name));
     if (typeof env.dev !== 'undefined' && env.dev === true) {
         gutil.log(gutil.colors.blue('Notice [' + id + ']: '), 'dev mode is enabled');
     }
 
     if (typeof env.less != 'undefined' && env.less) {
+        if (theme) {
+            env.less.glob = env.less.glob.replace(/themes/, 'themes/' + theme);
+            gutil.log(gutil.colors.blue('Notice: '), 'senx theme set to ' + gutil.colors.blue(theme) + ' for LESS compilation');
+        }
+
         gulp.watch(env.root + env.less.glob, function (event) {
             var pathArray = event.path.split('/');
             var file = pathArray[pathArray.length - 1];
             var dir = event.path.replace(file, '');
 
             try {
-                gulp.src(env.less.getTarget(dir))
+                gulp.src(env.less.getTarget(dir, file))
                 .pipe(typeof env.dev !== 'undefined' && env.dev === true ? sourcemaps.init() : gutil.noop())
                 .pipe(less())
                 .on('error', function(e) {
@@ -115,6 +147,38 @@ var setWatch = function(id, env) {
                 .pipe(gulp.dest(env.less.getDest(dir)))
                 .pipe(size({
                     'title': 'ce-utils [' + id + ']: less post-css minify',
+                    'showFiles': true
+                })) // filesize post-minify css
+                .on('error', gutil.log);
+            } catch (e) {
+                gutil.log(gutil.colors.red('Error [' + id + ']: '), e.message);
+            }
+        });
+    }
+
+    if (typeof env.sass != 'undefined' && env.sass) {
+        gulp.watch(env.root + env.sass.glob, function (event) {
+            var pathArray = event.path.split('/');
+            var file = pathArray[pathArray.length - 1];
+            var dir = event.path.replace(file, '');
+
+            try {
+                gulp.src(env.sass.getTarget(dir, file))
+                .pipe(typeof env.dev !== 'undefined' && env.dev === true ? sourcemaps.init() : gutil.noop())
+                .pipe(sass().on('error', sass.logError))
+                .on('error', function(e) {
+                    gutil.log(gutil.colors.red('SASS compilation error [' + id + ']: '), e.message);
+                    this.emit('end');
+                })
+                .pipe(size({
+                    'title': 'ce-utils [' + id + ']: SASS pre-css minify',
+                    'showFiles': true
+                })) // filesize pre-minify css
+                .pipe(mincss())
+                .pipe(typeof env.dev !== 'undefined' && env.dev === true ? sourcemaps.write() : gutil.noop())
+                .pipe(gulp.dest(env.sass.getDest(dir)))
+                .pipe(size({
+                    'title': 'ce-utils [' + id + ']: SASS post-css minify',
                     'showFiles': true
                 })) // filesize post-minify css
                 .on('error', gutil.log);
@@ -148,7 +212,7 @@ var setWatch = function(id, env) {
                     'title': 'ce-utils[' + id + ']: js post-uglify',
                     'showFiles': true
                 })) // filesize post-uglify
-                .on('error', gutil.log)
+                .on('error', gutil.log);
             } catch (e) {
                 gutil.log(gutil.colors.red('Error[' + id + ']: '), e.message);
             }
@@ -156,7 +220,7 @@ var setWatch = function(id, env) {
     }
 };
 
-gulp.task('ce-utils', function(help, list, all, env, dev) {
+gulp.task('ce-utils', function(help, list, all, env, dev, theme) {
     if (help) {
         gutil.log(
             gutil.colors.blue('Here\s a listng of all available arguments:\n\n'),
@@ -169,6 +233,9 @@ gulp.task('ce-utils', function(help, list, all, env, dev) {
 
             gutil.colors.blue('\t--env [environment]'),
             '- loads the specified environment\n',
+
+            gutil.colors.blue('\t--theme [theme]'),
+            '- monitors less in a specific senx theme\n',
 
             gutil.colors.blue('\t--all'),
             '- loads all available environments\n',
@@ -204,7 +271,8 @@ gulp.task('ce-utils', function(help, list, all, env, dev) {
             } else {
                 config[env].dev = false;
             }
-            setWatch(env, config[env]);
+
+            setWatch(env, config[env], theme);
         } else {
             gutil.log(gutil.colors.red('Error: '), 'Couldn\'t find the \'' + env + '\' environment... exiting');
         }
