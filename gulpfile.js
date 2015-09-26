@@ -1,7 +1,3 @@
-/*
-    - preliminary SASS
-    - abstract out themes a bit better
-*/
 var fs = require('fs');
 var path = require('path');
 
@@ -16,6 +12,7 @@ var sourcemaps = require('gulp-sourcemaps');
 var mincss = require('gulp-minify-css');
 var uglify = require('gulp-uglify');
 var size = require('gulp-size');
+var notify = require("gulp-notify");
 
 var defaults = {
     "amend-tinymce": {
@@ -120,7 +117,7 @@ var setWatch = function(id, env, theme) {
     }
 
     if (typeof env.less != 'undefined' && env.less) {
-        if (theme) {
+        if (id == 'senx' && theme) {
             env.less.glob = env.less.glob.replace(/themes/, 'themes/' + theme);
             gutil.log(gutil.colors.blue('Notice: '), 'senx theme set to ' + gutil.colors.blue(theme) + ' for LESS compilation');
         }
@@ -134,10 +131,18 @@ var setWatch = function(id, env, theme) {
                 gulp.src(env.less.getTarget(dir, file))
                 .pipe(typeof env.dev !== 'undefined' && env.dev === true ? sourcemaps.init() : gutil.noop())
                 .pipe(less())
-                .on('error', function(e) {
+                .on('error', notify.onError(function (e) {
+                    return {
+                        'title': 'ce-utils',
+                        'subtitle': 'LESS compilation error',
+                        'message': e.message,
+                        'sound': false // deactivate sound?
+                    };
+                }))
+                /*.on('error', function(e) {
                     gutil.log(gutil.colors.red('LESS compilation error [' + id + ']: '), e.message);
                     this.emit('end');
-                })
+                })*/
                 .pipe(size({
                     'title': 'ce-utils [' + id + ']: less pre-css minify',
                     'showFiles': true
@@ -149,6 +154,11 @@ var setWatch = function(id, env, theme) {
                     'title': 'ce-utils [' + id + ']: less post-css minify',
                     'showFiles': true
                 })) // filesize post-minify css
+                .pipe(notify({
+                    'title': 'ce-utils',
+                    'subtitle': 'LESS task',
+                    'message': 'Successfully compiled ' + dir + file
+                }))
                 .on('error', gutil.log);
             } catch (e) {
                 gutil.log(gutil.colors.red('Error [' + id + ']: '), e.message);
@@ -157,6 +167,11 @@ var setWatch = function(id, env, theme) {
     }
 
     if (typeof env.sass != 'undefined' && env.sass) {
+        if (id == 'senx' && theme) {
+            env.less.glob = env.less.glob.replace(/themes/, 'themes/' + theme);
+            gutil.log(gutil.colors.blue('Notice: '), 'senx theme set to ' + gutil.colors.blue(theme) + ' for LESS compilation');
+        }
+
         gulp.watch(env.root + env.sass.glob, function (event) {
             var pathArray = event.path.split('/');
             var file = pathArray[pathArray.length - 1];
@@ -235,7 +250,7 @@ gulp.task('ce-utils', function(help, list, all, env, dev, theme) {
             '- loads the specified environment\n',
 
             gutil.colors.blue('\t--theme [theme]'),
-            '- monitors less in a specific senx theme\n',
+            '- restricts less and sass globbing to a specific senx theme\n',
 
             gutil.colors.blue('\t--all'),
             '- loads all available environments\n',
