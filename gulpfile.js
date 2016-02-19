@@ -124,7 +124,7 @@ var defaults = {
         },
         "less": {
             "getDest": function(dir) {
-                if (dir.indexOf('themes/vitter') !== -1 || dir.indexOf('themes/casey') !== -1 || dir.indexOf('themes/kaine') !== -1) {
+                if (dir.indexOf('themes/vitter') !== -1 || dir.indexOf('themes/casey') !== -1 || dir.indexOf('themes/kaine') !== -1 || dir.indexOf('themes/donnelly') !== -1 || dir.indexOf('themes/murphy') !== -1) {
                     return dir.replace(/\/amend/i, '') + '../';
                 } else {
                     return dir + '../';
