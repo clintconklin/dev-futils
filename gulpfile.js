@@ -29,6 +29,20 @@ var defaults = {
         },
         "less": null
     },
+    "committee-hearings": {
+        "name": "Committee Hearings",
+        "root": "/Applications/ColdFusion11/cfusion/wwwroot/amend/branches/v3.5.5/content/committee/hearings/",
+        "js": null,
+        "less": {
+            "getDest": function(dir) {
+                return dir + '../';
+            },
+            "getTarget": function(dir, file) {
+                return dir + 'app.less';
+            },
+            "glob": "styles/**/*.less"
+        }
+    },
     "committee-mail": {
         "name": "Committee Mail",
         "root": "/Applications/ColdFusion11/cfusion/wwwroot/amend/branches/v3.5.5/content/committee/mail/",
@@ -39,6 +53,20 @@ var defaults = {
             },
             "getTarget": function(dir, file) {
                 return dir + 'app.less';
+            },
+            "glob": "styles/**/*.less"
+        }
+    },
+    "csa": {
+        "name": "Casting Society of America",
+        "root": "/Applications/ColdFusion11/cfusion/wwwroot/csa/site/trunk/",
+        "js": null,
+        "less": {
+            "getDest": function(dir) {
+                return dir + '../css/';
+            },
+            "getTarget": function(dir, file) {
+                return dir + file;
             },
             "glob": "styles/**/*.less"
         }
@@ -57,6 +85,20 @@ var defaults = {
             "glob": "styles/**/*.scss"
         }
     },
+    "hsgac": {
+        "name": "HSGAC",
+        "root": "/Applications/ColdFusion11/cfusion/wwwroot/hsgac/site/trunk/",
+        "js": null,
+        "less": {
+            "getDest": function(dir) {
+                return dir + '../css/';
+            },
+            "getTarget": function(dir, file) {
+                return dir + file;
+            },
+            "glob": "styles/less/*.less"
+        }
+    },
     "lab": {
         "name": "LA's BEST",
         "root": "/Applications/ColdFusion11/cfusion/wwwroot/lasbest/branches/v3/trunk/",
@@ -66,7 +108,7 @@ var defaults = {
                 return dir + '../css/';
             },
             "getTarget": function(dir, file) {
-                return dir + file + '.TESTER';
+                return dir + file;
             },
             "glob": "styles/**/*.less"
         }
@@ -82,10 +124,14 @@ var defaults = {
         },
         "less": {
             "getDest": function(dir) {
-                return dir + '../';
+                if (dir.indexOf('themes/vitter') !== -1 || dir.indexOf('themes/casey') !== -1 || dir.indexOf('themes/kaine') !== -1) {
+                    return dir.replace(/\/amend/i, '') + '../';
+                } else {
+                    return dir + '../';
+                }
             },
             "getTarget": function(dir, file) {
-                if (dir.indexOf('themes/vitter') !== -1 || dir.indexOf('themes/casey') !== -1) { // target file is bootstrap.less, and some less files are in an /amend subdirectory
+                if (dir.indexOf('themes/vitter') !== -1 || dir.indexOf('themes/casey') !== -1 || dir.indexOf('themes/kaine') !== -1 || dir.indexOf('themes/donnelly') !== -1 || dir.indexOf('themes/murphy') !== -1) { // target file is bootstrap.less, and some less files are in an /amend subdirectory
                     return dir.replace(/\/amend/i, '') + 'bootstrap.less';
                 } else {
                     return dir + 'common.less';
@@ -128,7 +174,8 @@ var setWatch = function(id, env, theme) {
             var dir = event.path.replace(file, '');
 
             try {
-                gulp.src(env.less.getTarget(dir, file))
+                var target = env.less.getTarget(dir, file);
+                gulp.src(target)
                 .pipe(typeof env.dev !== 'undefined' && env.dev === true ? sourcemaps.init() : gutil.noop())
                 .pipe(less())
                 .on('error', notify.onError(function (e) {
@@ -157,7 +204,7 @@ var setWatch = function(id, env, theme) {
                 .pipe(notify({
                     'title': 'ce-utils',
                     'subtitle': 'LESS task',
-                    'message': 'Successfully compiled ' + dir + file
+                    'message': 'Successfully compiled ' + target
                 }))
                 .on('error', gutil.log);
             } catch (e) {
@@ -178,7 +225,8 @@ var setWatch = function(id, env, theme) {
             var dir = event.path.replace(file, '');
 
             try {
-                gulp.src(env.sass.getTarget(dir, file))
+                var target = env.sass.getTarget(dir, file);
+                gulp.src(target)
                 .pipe(typeof env.dev !== 'undefined' && env.dev === true ? sourcemaps.init() : gutil.noop())
                 .pipe(sass().on('error', sass.logError))
                 .on('error', function(e) {
