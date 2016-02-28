@@ -304,7 +304,7 @@ var setWatch = function(id, env, theme) {
                     .pipe(notify({
                         'title': 'dev-futils',
                         'subtitle': 'webpack task',
-                        'message': 'Successful compile'
+                        'message': 'webpack successfully compiled ' + env.name
                     }))
                     .on('error', gutil.log);
                 } else {
