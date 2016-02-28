@@ -15,7 +15,7 @@ Navigate to the cloned directory, and type `gulp dev-futils [args]`
 
 Alternately, add an alias to your .bash_profile like so (the example below assumes you've cloned the dev-futils folder into your user directory):
 
-`alias dev-futils='gulp ~/working/git/dev-futils'`
+`alias dev-futils='gulp ~/dev-futils'`
 
 Which will enable you to simply type `dev-futils [args]` without navigating to the cloned directory.
 
