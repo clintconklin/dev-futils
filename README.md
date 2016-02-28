@@ -8,6 +8,7 @@ A gulp-based less/sass/js (with uglify and webpack variants) compilation and min
 2. If you don't have it already, install npm via the node install @ https://nodejs.org/
 3. Make sure gulp is installed globally: `npm install -g gulp`; note that while `sudo` is fine for gulp, as a general practice [you really shouldn't use it to install modules globally](https://docs.npmjs.com/getting-started/fixing-npm-permissions)
 4. From the repo directory, run `npm install`
+5. If you're planning on using live reload, please [install one of the browser extensions](http://livereload.com/extensions/)
 
 ## Running
 

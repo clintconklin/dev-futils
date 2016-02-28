@@ -14,6 +14,7 @@ var uglify = require('gulp-uglify');
 var webpack = require('webpack-stream');
 var size = require('gulp-size');
 var notify = require("gulp-notify");
+var livereload = require('gulp-livereload');
 
 var defaults = {
     "amend-tinymce": {
@@ -89,6 +90,7 @@ var defaults = {
     "forms-composer": {
         "name": "Forms Composer",
         "root": "/Users/clint/working/forms/composer/",
+        "livereload": true,
         "js": {
             "webpack": true,
             "config": "webpack.config.js",
@@ -228,7 +230,8 @@ var setWatch = function(id, env, theme) {
                     'subtitle': 'LESS task',
                     'message': 'Successfully compiled ' + target
                 }))
-                .on('error', gutil.log);
+                .on('error', gutil.log)
+                .pipe(typeof env.livereload !== 'undefined' && env.livereload === true ? livereload() : gutil.noop());
             } catch (e) {
                 gutil.log(gutil.colors.red('Error [' + id + ']: '), e.message);
             }
@@ -266,7 +269,8 @@ var setWatch = function(id, env, theme) {
                     'title': 'dev-futils [' + id + ']: SASS post-css minify',
                     'showFiles': true
                 })) // filesize post-minify css
-                .on('error', gutil.log);
+                .on('error', gutil.log)
+                .pipe(typeof env.livereload !== 'undefined' && env.livereload === true ? livereload() : gutil.noop());
             } catch (e) {
                 gutil.log(gutil.colors.red('Error [' + id + ']: '), e.message);
             }
@@ -306,7 +310,8 @@ var setWatch = function(id, env, theme) {
                         'subtitle': 'webpack task',
                         'message': 'webpack successfully compiled ' + env.name
                     }))
-                    .on('error', gutil.log);
+                    .on('error', gutil.log)
+                    .pipe(typeof env.livereload !== 'undefined' && env.livereload === true ? livereload() : gutil.noop());
                 } else {
                     gulp.src(event.path)
                     .pipe(size({
@@ -325,7 +330,8 @@ var setWatch = function(id, env, theme) {
                         'title': 'dev-futils[' + id + ']: js post-uglify',
                         'showFiles': true
                     })) // filesize post-uglify
-                    .on('error', gutil.log);
+                    .on('error', gutil.log)
+                    .pipe(typeof env.livereload !== 'undefined' && env.livereload === true ? livereload() : gutil.noop());
                 }
             } catch (e) {
                 gutil.log(gutil.colors.red('Error[' + id + ']: '), e.message);
@@ -384,6 +390,11 @@ gulp.task('dev-futils', function(help, list, all, env, dev, theme) {
                 config[env].dev = true;
             } else {
                 config[env].dev = false;
+            }
+
+            if (typeof config[env].livereload != 'undefined' && config[env].livereload === true) {
+                livereload.listen();
+                gutil.log(gutil.colors.blue('Notice: '), 'Live reload is enabled.');
             }
 
             setWatch(env, config[env], theme);
