@@ -1,6 +1,6 @@
 # CreativEngine Development Utilities
 
-A gulp-based less/js compilation and minification utility that's geared towards the CreativEngine development environment.
+A gulp-based less/sass/js (with uglify and webpack variants) compilation and minification utility that's kinda-sorta geared towards the CreativEngine development environment.
 
 ## Installation
 

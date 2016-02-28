@@ -11,6 +11,7 @@ var sass = require('gulp-sass');
 var sourcemaps = require('gulp-sourcemaps');
 var mincss = require('gulp-minify-css');
 var uglify = require('gulp-uglify');
+var webpack = require('webpack-stream');
 var size = require('gulp-size');
 var notify = require("gulp-notify");
 
@@ -83,6 +84,27 @@ var defaults = {
                 return dir + file;
             },
             "glob": "styles/**/*.scss"
+        }
+    },
+    "forms-composer": {
+        "name": "Forms Composer",
+        "root": "/Users/clint/working/forms/composer/",
+        "js": {
+            "webpack": true,
+            "config": "webpack.config.js",
+            "glob": [ "main.js", "app/**/*.js"],
+            "getDest": function(dir) {
+                return 'public/'; // filename in config
+            }
+        },
+        "less": {
+            "getDest": function(dir) {
+                return dir + '../';
+            },
+            "getTarget": function(dir, file) {
+                return dir + 'forms-composer.less';
+            },
+            "glob": "public/styles/**/*.less"
         }
     },
     "hsgac": {
@@ -252,30 +274,59 @@ var setWatch = function(id, env, theme) {
     }
 
     if (typeof env.js != 'undefined' && env.js) {
-        gulp.watch(env.root + env.js.glob, function (event) {
+        // note: the glob setting can be either a string (single filepath) or an array (of globs)
+        if (env.js.glob.constructor === Array) {
+            env.js.glob.forEach(function(expr, idx) {
+                env.js.glob[idx] = env.root + expr;
+            });
+        } else {
+            env.js.glob = env.root + env.js.glob;
+        }
+
+        gulp.watch(env.js.glob, function (event) {
             var pathArray = event.path.split('/');
             var file = pathArray[pathArray.length - 1];
             var dir = event.path.replace(file, '');
 
             try {
-                gulp.src(event.path)
-                .pipe(size({
-                    'title': 'ce-utils[' + id + ']: js pre-uglify',
-                    'showFiles': true
-                })) // filesize pre-uglify
-                .pipe(uglify())
-                .on('error', function(e) {
-                    gutil.log(gutil.colors.red('uglification error[' + id + ']: '), e.message);
-                    this.emit('end');
-                })
-                //.pipe(rename(env.js.getName(file)))
-                .pipe(typeof env.js.getName === 'function' ? rename(env.js.getName(file)) : gutil.noop())
-                .pipe(gulp.dest(env.js.getDest(dir)))
-                .pipe(size({
-                    'title': 'ce-utils[' + id + ']: js post-uglify',
-                    'showFiles': true
-                })) // filesize post-uglify
-                .on('error', gutil.log);
+                if (typeof env.js.webpack !== 'undefined' && env.js.webpack === true) {
+                    gulp.src(event.path)
+                    .pipe(webpack(require(env.root + env.js.config)))
+                    .on('error', notify.onError(function (e) {
+                        return {
+                            'title': 'ce-utils',
+                            'subtitle': 'webpack compilation error',
+                            'message': e.message,
+                            'sound': false // deactivate sound?
+                        };
+                    }))
+                    .pipe(gulp.dest(env.root + env.js.getDest()))
+                    .pipe(notify({
+                        'title': 'ce-utils',
+                        'subtitle': 'webpack task',
+                        'message': 'Successful compile'
+                    }))
+                    .on('error', gutil.log);
+                } else {
+                    gulp.src(event.path)
+                    .pipe(size({
+                        'title': 'ce-utils[' + id + ']: js pre-uglify',
+                        'showFiles': true
+                    })) // filesize pre-uglify
+                    .pipe(uglify())
+                    .on('error', function(e) {
+                        gutil.log(gutil.colors.red('uglification error[' + id + ']: '), e.message);
+                        this.emit('end');
+                    })
+                    //.pipe(rename(env.js.getName(file)))
+                    .pipe(typeof env.js.getName === 'function' ? rename(env.js.getName(file)) : gutil.noop())
+                    .pipe(gulp.dest(env.js.getDest(dir)))
+                    .pipe(size({
+                        'title': 'ce-utils[' + id + ']: js post-uglify',
+                        'showFiles': true
+                    })) // filesize post-uglify
+                    .on('error', gutil.log);
+                }
             } catch (e) {
                 gutil.log(gutil.colors.red('Error[' + id + ']: '), e.message);
             }

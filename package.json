@@ -28,7 +28,8 @@
     "gulp-uglify": "^1.2.0",
     "gulp-util": "^3.0.6",
     "merge": "^1.2.0",
-    "node-notifier": "^4.3.1"
+    "node-notifier": "^4.3.1",
+    "webpack-stream": "^3.1.0"
   },
   "keywords": [],
   "repository": "",
