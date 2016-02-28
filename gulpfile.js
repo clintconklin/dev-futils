@@ -202,7 +202,7 @@ var setWatch = function(id, env, theme) {
                 .pipe(less())
                 .on('error', notify.onError(function (e) {
                     return {
-                        'title': 'ce-utils',
+                        'title': 'dev-futils',
                         'subtitle': 'LESS compilation error',
                         'message': e.message,
                         'sound': false // deactivate sound?
@@ -213,18 +213,18 @@ var setWatch = function(id, env, theme) {
                     this.emit('end');
                 })*/
                 .pipe(size({
-                    'title': 'ce-utils [' + id + ']: less pre-css minify',
+                    'title': 'dev-futils [' + id + ']: less pre-css minify',
                     'showFiles': true
                 })) // filesize pre-minify css
                 .pipe(mincss())
                 .pipe(typeof env.dev !== 'undefined' && env.dev === true ? sourcemaps.write() : gutil.noop())
                 .pipe(gulp.dest(env.less.getDest(dir)))
                 .pipe(size({
-                    'title': 'ce-utils [' + id + ']: less post-css minify',
+                    'title': 'dev-futils [' + id + ']: less post-css minify',
                     'showFiles': true
                 })) // filesize post-minify css
                 .pipe(notify({
-                    'title': 'ce-utils',
+                    'title': 'dev-futils',
                     'subtitle': 'LESS task',
                     'message': 'Successfully compiled ' + target
                 }))
@@ -256,14 +256,14 @@ var setWatch = function(id, env, theme) {
                     this.emit('end');
                 })
                 .pipe(size({
-                    'title': 'ce-utils [' + id + ']: SASS pre-css minify',
+                    'title': 'dev-futils [' + id + ']: SASS pre-css minify',
                     'showFiles': true
                 })) // filesize pre-minify css
                 .pipe(mincss())
                 .pipe(typeof env.dev !== 'undefined' && env.dev === true ? sourcemaps.write() : gutil.noop())
                 .pipe(gulp.dest(env.sass.getDest(dir)))
                 .pipe(size({
-                    'title': 'ce-utils [' + id + ']: SASS post-css minify',
+                    'title': 'dev-futils [' + id + ']: SASS post-css minify',
                     'showFiles': true
                 })) // filesize post-minify css
                 .on('error', gutil.log);
@@ -294,7 +294,7 @@ var setWatch = function(id, env, theme) {
                     .pipe(webpack(require(env.root + env.js.config)))
                     .on('error', notify.onError(function (e) {
                         return {
-                            'title': 'ce-utils',
+                            'title': 'dev-futils',
                             'subtitle': 'webpack compilation error',
                             'message': e.message,
                             'sound': false // deactivate sound?
@@ -302,7 +302,7 @@ var setWatch = function(id, env, theme) {
                     }))
                     .pipe(gulp.dest(env.root + env.js.getDest()))
                     .pipe(notify({
-                        'title': 'ce-utils',
+                        'title': 'dev-futils',
                         'subtitle': 'webpack task',
                         'message': 'Successful compile'
                     }))
@@ -310,7 +310,7 @@ var setWatch = function(id, env, theme) {
                 } else {
                     gulp.src(event.path)
                     .pipe(size({
-                        'title': 'ce-utils[' + id + ']: js pre-uglify',
+                        'title': 'dev-futils[' + id + ']: js pre-uglify',
                         'showFiles': true
                     })) // filesize pre-uglify
                     .pipe(uglify())
@@ -322,7 +322,7 @@ var setWatch = function(id, env, theme) {
                     .pipe(typeof env.js.getName === 'function' ? rename(env.js.getName(file)) : gutil.noop())
                     .pipe(gulp.dest(env.js.getDest(dir)))
                     .pipe(size({
-                        'title': 'ce-utils[' + id + ']: js post-uglify',
+                        'title': 'dev-futils[' + id + ']: js post-uglify',
                         'showFiles': true
                     })) // filesize post-uglify
                     .on('error', gutil.log);
@@ -334,7 +334,7 @@ var setWatch = function(id, env, theme) {
     }
 };
 
-gulp.task('ce-utils', function(help, list, all, env, dev, theme) {
+gulp.task('dev-futils', function(help, list, all, env, dev, theme) {
     if (help) {
         gutil.log(
             gutil.colors.blue('Here\s a listng of all available arguments:\n\n'),

@@ -11,13 +11,13 @@ A gulp-based less/sass/js (with uglify and webpack variants) compilation and min
 
 ## Running
 
-Navigate to the cloned directory, and type `gulp ce-utils [args]`
+Navigate to the cloned directory, and type `gulp dev-futils [args]`
 
-Alternately, add an alias to your .bash_profile like so (the example below assumes you've cloned the ce-utils folder into your user directory):
+Alternately, add an alias to your .bash_profile like so (the example below assumes you've cloned the dev-futils folder into your user directory):
 
-`alias ce-utils='cd ~/ce-utils/;gulp ce-utils'`
+`alias dev-futils='cd ~/dev-futils/;gulp dev-futils'`
 
-Which will enable you to simply type `ce-utils [args]` without navigating to the cloned directory.
+Which will enable you to simply type `dev-futils [args]` without navigating to the cloned directory.
 
 ### Arguments
 
@@ -31,6 +31,6 @@ Which will enable you to simply type `ce-utils [args]` without navigating to the
 
 `--all` - loads all available environments
 
-`--dev` - generates an inline less sourcemap when passed with either `--env` or `--all`, e.g. `ce-utils --all --dev`
+`--dev` - generates an inline less sourcemap when passed with either `--env` or `--all`, e.g. `dev-futils --all --dev`
 
 **NOTE:** depending on the scope of the glob patterns in the environments specified in the config, you might see a 'maximum call stack size exceeded' error when using the `--all` argument. If you do, either refine the glob pattern to target a smaller number of files, or fall back to the `--env [environment]` argument.
