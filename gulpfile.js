@@ -34,6 +34,10 @@ var defaults = {
     "committee-hearings": {
         "name": "Committee Hearings",
         "root": "/Applications/ColdFusion11/cfusion/wwwroot/amend/branches/v3.5.5/content/committee/hearings/",
+        "livereload": true,
+        "reloaders": { // stuff to monitor for reload only
+            "glob": [ "scripts/app.js", "cfc/**/*.cfc", "index.cfm", "templates/**/*.cfm" ]
+        },
         "js": null,
         "less": {
             "getDest": function(dir) {
@@ -94,7 +98,7 @@ var defaults = {
         "js": {
             "webpack": true,
             "config": "webpack.config.js",
-            "glob": [ "main.js", "app/**/*.js"],
+            "glob": [ "main.js", "app/**/*.js" ],
             "getDest": function(dir) {
                 return 'public/'; // filename in config
             }
@@ -184,6 +188,36 @@ var setWatch = function(id, env, theme) {
     gutil.log(gutil.colors.blue('Notice: [' + id + ']'), 'Environment successfully set to ', gutil.colors.blue(env.name));
     if (typeof env.dev !== 'undefined' && env.dev === true) {
         gutil.log(gutil.colors.blue('Notice [' + id + ']: '), 'dev mode is enabled');
+    }
+
+    if (typeof env.reloaders != 'undefined' && env.reloaders) {
+        // note: the glob setting can be either a string (single filepath) or an array (of globs)
+        if (env.reloaders.glob.constructor === Array) {
+            env.reloaders.glob.forEach(function(expr, idx) {
+                env.reloaders.glob[idx] = env.root + expr;
+            });
+        } else {
+            env.reloaders.glob = env.root + env.reloaders.glob;
+        }
+
+        gulp.watch(env.reloaders.glob, function (event) {
+            var pathArray = event.path.split('/');
+            var file = pathArray[pathArray.length - 1];
+            var dir = event.path.replace(file, '');
+
+            try {
+                gulp.src(event.path)
+                .pipe(notify({
+                    'title': 'dev-futils',
+                    'subtitle': 'livereload',
+                    'message': 'reloading ' + event.path
+                }))
+                .on('error', gutil.log)
+                .pipe(typeof env.livereload !== 'undefined' && env.livereload === true ? livereload() : gutil.noop());
+            } catch (e) {
+                gutil.log(gutil.colors.red('Error[' + id + ']: '), e.message);
+            }
+        });
     }
 
     if (typeof env.less != 'undefined' && env.less) {
