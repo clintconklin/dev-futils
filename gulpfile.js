@@ -8,6 +8,7 @@ var merge = require('merge');
 
 var less = require('gulp-less');
 var sass = require('gulp-sass');
+var babel = require('gulp-babel');
 var sourcemaps = require('gulp-sourcemaps');
 var mincss = require('gulp-minify-css');
 var uglify = require('gulp-uglify');
@@ -17,6 +18,33 @@ var notify = require("gulp-notify");
 var livereload = require('gulp-livereload');
 
 var defaults = {
+	"amend": {
+        "name": "Amend",
+        "root": "/Applications/ColdFusion11/cfusion/wwwroot/amend/branches/v3.5.5/",
+		"livereload": true,
+		"reloaders": { // stuff to monitor for reload only
+			"glob": [ "cfc/**/*.cfc", "index.cfm", "templates/**/*.cfm", "**/styles/**/*.scss" ]
+        },
+        "js": null,
+        "less": {
+            "getDest": function(dir) {
+                return dir + '../';
+            },
+            "getTarget": function(dir, file) {
+                return dir + 'theme.less';
+            },
+            "glob": "styles/**/*.less"
+		},
+		"sass": {
+            "getDest": function(dir) {
+                return dir + '../';
+            },
+            "getTarget": function(dir, file) {
+                return dir + file;
+            },
+			"glob": "**/styles/**/*.scss"
+        }
+    },
     "amend-tinymce": {
         "name": "Amend - tinymce plugins",
         "root": "/Applications/ColdFusion11/cfusion/wwwroot/amend/branches/v3.5/script/tinymce/jscripts/tiny_mce/plugins/",
@@ -143,7 +171,11 @@ var defaults = {
     },
     "senx": {
         "name": "Senator X",
-        "root": "/Applications/ColdFusion11/cfusion/wwwroot/senator_x/trunk/",
+		"root": "/Applications/ColdFusion11/cfusion/wwwroot/senator_x/trunk/",
+		"livereload": true,
+        "reloaders": { // stuff to monitor for reload only
+			"glob": [ "**/*.js", "**/*.cfc", "**/*.cfm" ]
+        },
         "js": {
             "getDest": function(dir) {
                 return dir.replace('/src', '');
@@ -167,7 +199,21 @@ var defaults = {
             },
             "glob": "themes/**/*.less"
         }
-    }
+	},
+	"ttg": {
+        "name": "The Table Group",
+        "root": "/Applications/ColdFusion11/cfusion/wwwroot/ttg/site/trunk/",
+        "js": null,
+        "less": {
+			"getDest": function(dir) {
+                return dir + '../';
+            },
+            "getTarget": function(dir, file) {
+                return dir + 'common.less';
+            },
+            "glob": "styles/**/*.less"
+        }
+    },
 };
 
 var config = null;
@@ -194,10 +240,10 @@ var setWatch = function(id, env, theme) {
         // note: the glob setting can be either a string (single filepath) or an array (of globs)
         if (env.reloaders.glob.constructor === Array) {
             env.reloaders.glob.forEach(function(expr, idx) {
-                env.reloaders.glob[idx] = env.root + expr;
-            });
-        } else {
-            env.reloaders.glob = env.root + env.reloaders.glob;
+				env.reloaders.glob[idx] = env.root + ((id === 'senx' && theme) ? 'themes/' + theme + '/' : '') + expr;
+			});
+		} else {
+			env.reloaders.glob = env.root + ((id === 'senx' && theme) ? 'themes/' + theme + '/' : '' ) + env.reloaders.glob;
         }
 
         gulp.watch(env.reloaders.glob, function (event) {
@@ -329,6 +375,9 @@ var setWatch = function(id, env, theme) {
             try {
                 if (typeof env.js.webpack !== 'undefined' && env.js.webpack === true) {
                     gulp.src(event.path)
+					.pipe(babel({
+						presets: ['es2015']
+					}))
                     .pipe(webpack(require(env.root + env.js.config)))
                     .on('error', notify.onError(function (e) {
                         return {
@@ -348,6 +397,9 @@ var setWatch = function(id, env, theme) {
                     .pipe(typeof env.livereload !== 'undefined' && env.livereload === true ? livereload() : gutil.noop());
                 } else {
                     gulp.src(event.path)
+					.pipe(babel({
+						presets: ['es2015']
+					}))
                     .pipe(size({
                         'title': 'dev-futils[' + id + ']: js pre-uglify',
                         'showFiles': true
