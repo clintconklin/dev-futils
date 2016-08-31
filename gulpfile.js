@@ -1,3 +1,7 @@
+/*
+	TODO: fix babel
+		add uglifyOptions (need { 'mangle': false } for angular-based stuff or it breaks injection)
+*/
 var fs = require('fs');
 var path = require('path');
 
@@ -9,6 +13,7 @@ var merge = require('merge');
 var less = require('gulp-less');
 var sass = require('gulp-sass');
 var babel = require('gulp-babel');
+var es2015 = require('babel-preset-es2015');
 var sourcemaps = require('gulp-sourcemaps');
 var mincss = require('gulp-minify-css');
 var uglify = require('gulp-uglify');
@@ -66,7 +71,12 @@ var defaults = {
         "reloaders": { // stuff to monitor for reload only
             "glob": [ "scripts/app.js", "cfc/**/*.cfc", "index.cfm", "templates/**/*.cfm" ]
         },
-        "js": null,
+        "js": {
+            "getDest": function(dir) {
+                return dir.replace('/src', '');
+            },
+            "glob": "scripts/src/**/*.js"
+        },
         "less": {
             "getDest": function(dir) {
                 return dir + '../';
@@ -184,15 +194,15 @@ var defaults = {
         },
         "less": {
             "getDest": function(dir) {
-                if (dir.indexOf('themes/vitter') !== -1 || dir.indexOf('themes/casey') !== -1 || dir.indexOf('themes/kaine') !== -1 || dir.indexOf('themes/donnelly') !== -1 || dir.indexOf('themes/murphy') !== -1) {
+                if (dir.indexOf('themes/hirono') !== -1 || dir.indexOf('themes/vitter') !== -1 || dir.indexOf('themes/casey') !== -1 || dir.indexOf('themes/kaine') !== -1 || dir.indexOf('themes/donnelly') !== -1 || dir.indexOf('themes/murphy') !== -1 || dir.indexOf('themes/heinrich') !== -1) {
                     return dir.replace(/\/amend/i, '') + '../';
                 } else {
                     return dir + '../';
                 }
             },
             "getTarget": function(dir, file) {
-                if (dir.indexOf('themes/vitter') !== -1 || dir.indexOf('themes/casey') !== -1 || dir.indexOf('themes/kaine') !== -1 || dir.indexOf('themes/donnelly') !== -1 || dir.indexOf('themes/murphy') !== -1) { // target file is bootstrap.less, and some less files are in an /amend subdirectory
-                    return dir.replace(/\/amend/i, '') + 'bootstrap.less';
+                if (dir.indexOf('themes/hirono') !== -1 || dir.indexOf('themes/vitter') !== -1 || dir.indexOf('themes/casey') !== -1 || dir.indexOf('themes/kaine') !== -1 || dir.indexOf('themes/donnelly') !== -1 || dir.indexOf('themes/murphy') !== -1 || dir.indexOf('themes/heinrich') !== -1) { // target file is bootstrap.less, and some less files are in an /amend subdirectory
+					return dir.replace(/\/amend/i, '') + 'bootstrap.less';
                 } else {
                     return dir + 'common.less';
                 }
@@ -211,9 +221,37 @@ var defaults = {
             "getTarget": function(dir, file) {
                 return dir + 'common.less';
             },
+            "glob": "**/styles/**/*.less"
+        }
+    },
+	"ttg-client": {
+        "name": "The Table Group Client Console",
+        "root": "/Applications/ColdFusion11/cfusion/wwwroot/ttg/site/trunk/client/",
+        "js": null,
+        "less": {
+			"getDest": function(dir) {
+                return dir + '../';
+            },
+            "getTarget": function(dir, file) {
+                return dir + 'theme.less';
+            },
             "glob": "styles/**/*.less"
         }
     },
+	"wyden": {
+		"name": "Senator Wyden",
+		"root": "/Applications/ColdFusion11/cfusion/wwwroot/wyden/site/branches/v2/",
+		"js": null,
+		"less": {
+			"getDest": function(dir) {
+				return dir + '../';
+			},
+			"getTarget": function(dir, file) {
+				return dir + 'common.less';
+			},
+			"glob": "styles/**/*.less"
+		}
+	},
 };
 
 var config = null;
@@ -376,7 +414,7 @@ var setWatch = function(id, env, theme) {
                 if (typeof env.js.webpack !== 'undefined' && env.js.webpack === true) {
                     gulp.src(event.path)
 					.pipe(babel({
-						presets: ['es2015']
+						presets: [ es2015 ]
 					}))
                     .pipe(webpack(require(env.root + env.js.config)))
                     .on('error', notify.onError(function (e) {
@@ -398,13 +436,13 @@ var setWatch = function(id, env, theme) {
                 } else {
                     gulp.src(event.path)
 					.pipe(babel({
-						presets: ['es2015']
+						presets: [ es2015 ]
 					}))
                     .pipe(size({
                         'title': 'dev-futils[' + id + ']: js pre-uglify',
                         'showFiles': true
                     })) // filesize pre-uglify
-                    .pipe(uglify())
+                    .pipe(uglify({ 'mangle': false }))
                     .on('error', function(e) {
                         gutil.log(gutil.colors.red('uglification error[' + id + ']: '), e.message);
                         this.emit('end');
