@@ -28,9 +28,14 @@ var defaults = {
         "root": "/Applications/ColdFusion11/cfusion/wwwroot/amend/branches/v3.5.5/",
 		"livereload": true,
 		"reloaders": { // stuff to monitor for reload only
-			"glob": [ "cfc/**/*.cfc", "index.cfm", "templates/**/*.cfm", "**/styles/**/*.scss" ]
+			"glob": [ "cfc/**/*.cfc", "index.cfm", "styles/**/*.less", "**/styles/**/*.scss" ]
         },
-        "js": null,
+        "js": {
+            "getDest": function(dir) {
+                return dir.replace('/src', '');
+            },
+            "glob": "**/script/**/src/**/*.js"
+        },
         "less": {
             "getDest": function(dir) {
                 return dir + '../';
