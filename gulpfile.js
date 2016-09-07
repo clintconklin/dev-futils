@@ -1,6 +1,5 @@
 /*
-	TODO: fix babel
-		add uglifyOptions (need { 'mangle': false } for angular-based stuff or it breaks injection)
+	TODO: add uglifyOptions (need { 'mangle': false } for angular-based stuff or it breaks injection)
 */
 var fs = require('fs');
 var path = require('path');
@@ -421,6 +420,10 @@ var setWatch = function(id, env, theme) {
 					.pipe(babel({
 						presets: [ es2015 ]
 					}))
+					.on('error', function(e) {
+						gutil.log(gutil.colors.red('babel error[' + id + ']: '), e.message);
+						this.emit('end');
+					})
                     .pipe(webpack(require(env.root + env.js.config)))
                     .on('error', notify.onError(function (e) {
                         return {
@@ -443,6 +446,10 @@ var setWatch = function(id, env, theme) {
 					.pipe(babel({
 						presets: [ es2015 ]
 					}))
+					.on('error', function(e) {
+						gutil.log(gutil.colors.red('babel error[' + id + ']: '), e.message);
+						this.emit('end');
+					})
                     .pipe(size({
                         'title': 'dev-futils[' + id + ']: js pre-uglify',
                         'showFiles': true
