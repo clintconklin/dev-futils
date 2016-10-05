@@ -54,6 +54,25 @@ var defaults = {
 			"glob": "**/styles/**/*.scss"
         }
     },
+	"clips": {
+        "name": "Clips",
+        "root": "/Applications/ColdFusion11/cfusion/wwwroot/clips/site/trunk/",
+		"livereload": true,
+		"reloaders": { // stuff to monitor for reload only
+			"glob": [ "cfc/**/*.cfc", "index.cfm", "styles/**/*.less", "**/styles/**/*.scss" ]
+        },
+        "js": null,
+        "less": {
+            "getDest": function(dir) {
+                return dir + '../';
+            },
+            "getTarget": function(dir, file) {
+                return dir + 'styles.less';
+            },
+            "glob": "styles/**/*.less"
+		},
+		"sass": null
+    },
     "amend-tinymce": {
         "name": "Amend - tinymce plugins",
         "root": "/Applications/ColdFusion11/cfusion/wwwroot/amend/branches/v3.5/script/tinymce/jscripts/tiny_mce/plugins/",
