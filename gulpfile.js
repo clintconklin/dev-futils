@@ -57,7 +57,7 @@ var defaults = {
 	"clips": {
         "name": "Clips",
         "root": "/Applications/ColdFusion11/cfusion/wwwroot/clips/site/trunk/",
-		"livereload": true,
+		"livereload": false,
 		"reloaders": { // stuff to monitor for reload only
 			"glob": [ "cfc/**/*.cfc", "index.cfm", "styles/**/*.less", "**/styles/**/*.scss" ]
         },
@@ -69,7 +69,7 @@ var defaults = {
             "getTarget": function(dir, file) {
                 return dir + 'styles.less';
             },
-            "glob": "styles/**/*.less"
+            "glob": "**/styles/**/*.less"
 		},
 		"sass": null
     },
