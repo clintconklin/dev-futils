@@ -124,6 +124,29 @@ var defaults = {
             "glob": "styles/**/*.less"
         }
     },
+	"committee-nominees": {
+        "name": "Committee Nominees",
+        "root": "/Applications/ColdFusion11/cfusion/wwwroot/amend/branches/v3.5.5/content/committee/nominees/",
+        "livereload": true,
+        "reloaders": { // stuff to monitor for reload only
+            "glob": [ "scripts/app.js", "cfc/**/*.cfc", "index.cfm", "templates/**/*.cfm" ]
+        },
+        "js": {
+            "getDest": function(dir) {
+                return dir.replace('/src', '');
+            },
+            "glob": "scripts/src/**/*.js"
+        },
+        "less": {
+            "getDest": function(dir) {
+                return dir + '../';
+            },
+            "getTarget": function(dir, file) {
+                return dir + 'app.less';
+            },
+            "glob": "styles/**/*.less"
+        }
+    },
     "csa": {
         "name": "Casting Society of America",
         "root": "/Applications/ColdFusion11/cfusion/wwwroot/csa/site/trunk/",
