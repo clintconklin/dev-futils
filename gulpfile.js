@@ -24,7 +24,7 @@ var livereload = require('gulp-livereload');
 var defaults = {
 	"amend": {
         "name": "Amend",
-        "root": "/Applications/ColdFusion11/cfusion/wwwroot/amend/branches/v3.5.5/",
+        "root": "/Applications/ColdFusion2016/cfusion/wwwroot/amend/branches/v3.5.5/",
 		"livereload": true,
 		"reloaders": { // stuff to monitor for reload only
 			"glob": [ "cfc/**/*.cfc", "index.cfm", "styles/**/*.less", "**/styles/**/*.scss" ]
@@ -56,7 +56,7 @@ var defaults = {
     },
 	"clips": {
         "name": "Clips",
-        "root": "/Applications/ColdFusion11/cfusion/wwwroot/clips/site/trunk/",
+        "root": "/Applications/ColdFusion2016/cfusion/wwwroot/clips/site/trunk/",
 		"livereload": false,
 		"reloaders": { // stuff to monitor for reload only
 			"glob": [ "cfc/**/*.cfc", "index.cfm", "styles/**/*.less", "**/styles/**/*.scss" ]
@@ -75,7 +75,7 @@ var defaults = {
     },
     "amend-tinymce": {
         "name": "Amend - tinymce plugins",
-        "root": "/Applications/ColdFusion11/cfusion/wwwroot/amend/branches/v3.5/script/tinymce/jscripts/tiny_mce/plugins/",
+        "root": "/Applications/ColdFusion2016/cfusion/wwwroot/amend/branches/v3.5/script/tinymce/jscripts/tiny_mce/plugins/",
         "js": {
             "getDest": function(dir) {
                 return dir;
@@ -89,7 +89,7 @@ var defaults = {
     },
     "committee-hearings": {
         "name": "Committee Hearings",
-        "root": "/Applications/ColdFusion11/cfusion/wwwroot/amend/branches/v3.5.5/content/committee/hearings/",
+        "root": "/Applications/ColdFusion2016/cfusion/wwwroot/amend/branches/v3.5.5/content/committee/hearings/",
         "livereload": true,
         "reloaders": { // stuff to monitor for reload only
             "glob": [ "scripts/app.js", "cfc/**/*.cfc", "index.cfm", "templates/**/*.cfm" ]
@@ -112,7 +112,7 @@ var defaults = {
     },
     "committee-mail": {
         "name": "Committee Mail",
-        "root": "/Applications/ColdFusion11/cfusion/wwwroot/amend/branches/v3.5.5/content/committee/mail/",
+        "root": "/Applications/ColdFusion2016/cfusion/wwwroot/amend/branches/v3.5.5/content/committee/mail/",
         "js": null,
         "less": {
             "getDest": function(dir) {
@@ -126,7 +126,7 @@ var defaults = {
     },
 	"committee-nominees": {
         "name": "Committee Nominees",
-        "root": "/Applications/ColdFusion11/cfusion/wwwroot/amend/branches/v3.5.5/content/committee/nominees/",
+        "root": "/Applications/ColdFusion2016/cfusion/wwwroot/amend/branches/v3.5.5/content/committee/nominees/",
         "livereload": true,
         "reloaders": { // stuff to monitor for reload only
             "glob": [ "scripts/app.js", "cfc/**/*.cfc", "index.cfm", "templates/**/*.cfm" ]
@@ -149,7 +149,7 @@ var defaults = {
     },
     "csa": {
         "name": "Casting Society of America",
-        "root": "/Applications/ColdFusion11/cfusion/wwwroot/csa/site/trunk/",
+        "root": "/Applications/ColdFusion2016/cfusion/wwwroot/csa/site/trunk/",
         "js": null,
         "less": {
             "getDest": function(dir) {
@@ -163,7 +163,7 @@ var defaults = {
     },
     "forms": {
         "name": "Forms",
-        "root": "/Applications/ColdFusion11/cfusion/wwwroot/test/forms/",
+        "root": "/Applications/ColdFusion2016/cfusion/wwwroot/test/forms/",
         "js": null,
         "sass": {
             "getDest": function(dir) {
@@ -199,7 +199,7 @@ var defaults = {
     },
     "hsgac": {
         "name": "HSGAC",
-        "root": "/Applications/ColdFusion11/cfusion/wwwroot/hsgac/site/trunk/",
+        "root": "/Applications/ColdFusion2016/cfusion/wwwroot/hsgac/site/trunk/",
         "js": null,
         "less": {
             "getDest": function(dir) {
@@ -213,7 +213,7 @@ var defaults = {
     },
     "lab": {
         "name": "LA's BEST",
-        "root": "/Applications/ColdFusion11/cfusion/wwwroot/lasbest/branches/v3/trunk/",
+        "root": "/Applications/ColdFusion2016/cfusion/wwwroot/lasbest/branches/v3/trunk/",
         "js": null,
         "less": {
             "getDest": function(dir) {
@@ -227,7 +227,7 @@ var defaults = {
     },
     "senx": {
         "name": "Senator X",
-		"root": "/Applications/ColdFusion11/cfusion/wwwroot/senator_x/trunk/",
+		"root": "/Applications/ColdFusion2016/cfusion/wwwroot/senator_x/trunk/",
 		"livereload": true,
         "reloaders": { // stuff to monitor for reload only
 			"glob": [ "**/*.js", "**/*.cfc", "**/*.cfm" ]
@@ -258,7 +258,7 @@ var defaults = {
 	},
 	"ttg": {
         "name": "The Table Group",
-        "root": "/Applications/ColdFusion11/cfusion/wwwroot/ttg/site/trunk/",
+        "root": "/Applications/ColdFusion2016/cfusion/wwwroot/ttg/site/trunk/",
         "js": null,
         "less": {
 			"getDest": function(dir) {
@@ -272,7 +272,7 @@ var defaults = {
     },
 	"ttg-client": {
         "name": "The Table Group Client Console",
-        "root": "/Applications/ColdFusion11/cfusion/wwwroot/ttg/site/trunk/client/",
+        "root": "/Applications/ColdFusion2016/cfusion/wwwroot/ttg/site/trunk/client/",
         "js": null,
         "less": {
 			"getDest": function(dir) {
@@ -286,7 +286,7 @@ var defaults = {
     },
 	"wyden": {
 		"name": "Senator Wyden",
-		"root": "/Applications/ColdFusion11/cfusion/wwwroot/wyden/site/branches/v2/",
+		"root": "/Applications/ColdFusion2016/cfusion/wwwroot/wyden/site/branches/v2/",
 		"js": null,
 		"less": {
 			"getDest": function(dir) {
