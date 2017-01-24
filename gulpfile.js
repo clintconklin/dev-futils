@@ -197,6 +197,20 @@ var defaults = {
             "glob": "public/styles/**/*.less"
         }
     },
+	"fyi-client": {
+		"name": "Fuller Youth Institute Client Console",
+		"root": "/Applications/ColdFusion2016/cfusion/wwwroot/fyi/trunk/site/client/",
+		"js": null,
+		"less": {
+			"getDest": function(dir) {
+				return dir + '../';
+			},
+			"getTarget": function(dir, file) {
+				return dir + 'theme.less';
+			},
+			"glob": "styles/**/*.less"
+		}
+	},
     "hsgac": {
         "name": "HSGAC",
         "root": "/Applications/ColdFusion2016/cfusion/wwwroot/hsgac/site/trunk/",
