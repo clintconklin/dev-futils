@@ -198,8 +198,8 @@ var defaults = {
         }
     },
 	"fyi": {
-		"name": "Fuller Youth Institute Client Console",
-		"root": "~/working/fyi/trunk/site/",
+		"name": "Fuller Youth Institute",
+		"root": "/Users/clint/working/fyi/site/",
 		"js": null,
 		"less": {
 			"getDest": function(dir) {
@@ -212,7 +212,7 @@ var defaults = {
 					return dir + 'common.less';
 				}
 			},
-			"glob": "styles/**/*.less"
+			"glob": "**/styles/**/*.less"
 		}
 	},
     "hsgac": {
