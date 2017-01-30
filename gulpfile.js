@@ -197,7 +197,7 @@ var defaults = {
             "glob": "public/styles/**/*.less"
         }
     },
-	"fyi-client": {
+	"fyi": {
 		"name": "Fuller Youth Institute Client Console",
 		"root": "~/working/fyi/trunk/site/",
 		"js": null,
