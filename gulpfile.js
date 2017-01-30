@@ -199,14 +199,18 @@ var defaults = {
     },
 	"fyi-client": {
 		"name": "Fuller Youth Institute Client Console",
-		"root": "/Applications/ColdFusion2016/cfusion/wwwroot/fyi/trunk/site/client/",
+		"root": "~/working/fyi/trunk/site/",
 		"js": null,
 		"less": {
 			"getDest": function(dir) {
 				return dir + '../';
 			},
 			"getTarget": function(dir, file) {
-				return dir + 'theme.less';
+				if (dir.indexOf('/client') !== -1) {
+					return dir + 'theme.less';
+				} else {
+					return dir + 'common.less';
+				}
 			},
 			"glob": "styles/**/*.less"
 		}
