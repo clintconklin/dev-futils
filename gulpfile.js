@@ -161,6 +161,20 @@ var defaults = {
             "glob": "styles/**/*.less"
         }
     },
+    "dnd": {
+        "name": "Drag 'n Drop Dev",
+        "root": "/Users/clint/working/test/dnd/",
+        "js": null,
+        "sass": {
+            "getDest": function(dir) {
+                return dir + '../';
+            },
+            "getTarget": function(dir, file) {
+                return dir + file;
+            },
+            "glob": "styles/**/*.scss"
+        }
+    },
     "forms": {
         "name": "Forms",
         "root": "/Applications/ColdFusion2016/cfusion/wwwroot/test/forms/",
