@@ -268,7 +268,7 @@ var defaults = {
             "getDest": function(dir) {
                 return dir.replace('/src', '');
             },
-            "glob": "scripts/src/**/*.js"
+            "glob": "**/scripts/src/**/*.js"
         },
         "less": {
             "getDest": function(dir) {
