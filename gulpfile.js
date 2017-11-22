@@ -24,7 +24,7 @@ var livereload = require('gulp-livereload');
 var defaults = {
 	"amend": {
         "name": "Amend",
-        "root": "/Applications/ColdFusion2016/cfusion/wwwroot/amend/branches/v3.5.5/",
+        "root": "/Users/clint/working/amend/",
 		"livereload": true,
 		"reloaders": { // stuff to monitor for reload only
 			"glob": [ "cfc/**/*.cfc", "index.cfm", "styles/**/*.less", "**/styles/**/*.scss" ]
@@ -87,6 +87,38 @@ var defaults = {
         },
         "less": null
     },
+	"committee-classified": {
+        "name": "Committee Classified",
+        "root": "/Users/clint/working/amend/content/committee/classified/",
+        "livereload": true,
+        "reloaders": { // stuff to monitor for reload only
+            "glob": [ "scripts/app.js", "cfc/**/*.cfc", "index.cfm", "templates/**/*.cfm" ]
+        },
+        "js": {
+            "getDest": function(dir) {
+                return dir.replace('/src', '');
+            },
+            "glob": "scripts/src/**/*.js"
+        },
+        "less": {
+            "getDest": function(dir) {
+                return dir + '../';
+            },
+            "getTarget": function(dir, file) {
+                return dir + 'app.less';
+            },
+            "glob": "styles/**/*.less"
+        },
+		"sass": {
+			"getDest": function(dir) {
+				return dir + '../';
+			},
+			"getTarget": function(dir, file) {
+				return dir + file;
+			},
+			"glob": "**/styles/**/*.scss"
+		}
+    },
     "committee-hearings": {
         "name": "Committee Hearings",
         "root": "/Applications/ColdFusion2016/cfusion/wwwroot/amend/branches/v3.5.5/content/committee/hearings/",
@@ -113,7 +145,16 @@ var defaults = {
     "committee-mail": {
         "name": "Committee Mail",
         "root": "/Applications/ColdFusion2016/cfusion/wwwroot/amend/branches/v3.5.5/content/committee/mail/",
-        "js": null,
+        "livereload": true,
+        "reloaders": { // stuff to monitor for reload only
+            "glob": [ "scripts/app.js", "cfc/**/*.cfc", "index.cfm", "templates/**/*.cfm" ]
+        },
+        "js": {
+            "getDest": function(dir) {
+                return dir.replace('/src', '');
+            },
+            "glob": "scripts/src/**/*.js"
+        },
         "less": {
             "getDest": function(dir) {
                 return dir + '../';
@@ -220,7 +261,9 @@ var defaults = {
 				return dir + '../';
 			},
 			"getTarget": function(dir, file) {
-				if (dir.indexOf('/client') !== -1) {
+				if (dir.indexOf('/client/report') !== -1) {
+					return dir + 'report.less';
+				} else if (dir.indexOf('/client') !== -1) {
 					return dir + 'theme.less';
 				} else {
 					return dir + 'common.less';
@@ -272,14 +315,14 @@ var defaults = {
         },
         "less": {
             "getDest": function(dir) {
-                if (dir.indexOf('themes/hirono_v1') !== -1 || dir.indexOf('themes/vitter') !== -1 || dir.indexOf('themes/casey') !== -1 || dir.indexOf('themes/kaine') !== -1 || dir.indexOf('themes/donnelly') !== -1 || dir.indexOf('themes/murphy') !== -1 || dir.indexOf('themes/heinrich') !== -1) {
+                if (dir.indexOf('themes/hirono_v1') !== -1 || dir.indexOf('themes/vitter') !== -1 || dir.indexOf('themes/casey') !== -1 || dir.indexOf('themes/kaine') !== -1 || dir.indexOf('themes/donnelly') !== -1 || dir.indexOf('themes/murphy') !== -1 || dir.indexOf('themes/heinrich') !== -1 || dir.indexOf('themes/king') !== -1) {
                     return dir.replace(/\/amend/i, '') + '../';
                 } else {
                     return dir + '../';
                 }
             },
             "getTarget": function(dir, file) {
-                if (dir.indexOf('themes/hirono_v1') !== -1 || dir.indexOf('themes/vitter') !== -1 || dir.indexOf('themes/casey') !== -1 || dir.indexOf('themes/kaine') !== -1 || dir.indexOf('themes/donnelly') !== -1 || dir.indexOf('themes/murphy') !== -1 || dir.indexOf('themes/heinrich') !== -1) { // target file is bootstrap.less, and some less files are in an /amend subdirectory
+                if (dir.indexOf('themes/hirono_v1') !== -1 || dir.indexOf('themes/vitter') !== -1 || dir.indexOf('themes/casey') !== -1 || dir.indexOf('themes/kaine') !== -1 || dir.indexOf('themes/donnelly') !== -1 || dir.indexOf('themes/murphy') !== -1 || dir.indexOf('themes/heinrich') !== -1 || dir.indexOf('themes/king') !== -1) { // target file is bootstrap.less, and some less files are in an /amend subdirectory
 					return dir.replace(/\/amend/i, '') + 'bootstrap.less';
                 } else {
                     return dir + 'common.less';
