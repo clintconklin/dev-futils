@@ -24,7 +24,7 @@ var livereload = require('gulp-livereload');
 var defaults = {
 	"amend": {
         "name": "Amend",
-        "root": "/Users/clint/working/amend/",
+        "root": "/Users/clint/working/amend/v3.5.5/",
 		"livereload": true,
 		"reloaders": { // stuff to monitor for reload only
 			"glob": [ "cfc/**/*.cfc", "index.cfm", "styles/**/*.less", "**/styles/**/*.scss" ]
@@ -89,7 +89,7 @@ var defaults = {
     },
 	"committee-classified": {
         "name": "Committee Classified",
-        "root": "/Users/clint/working/amend/content/committee/classified/",
+        "root": "/Users/clint/working/amend/v3.5.5/content/committee/classified/",
         "livereload": true,
         "reloaders": { // stuff to monitor for reload only
             "glob": [ "scripts/app.js", "cfc/**/*.cfc", "index.cfm", "templates/**/*.cfm" ]
@@ -121,7 +121,7 @@ var defaults = {
     },
     "committee-hearings": {
         "name": "Committee Hearings",
-        "root": "/Applications/ColdFusion2016/cfusion/wwwroot/amend/branches/v3.5.5/content/committee/hearings/",
+        "root": "/Users/clint/working/amend/v3.5.5/content/committee/hearings/",
         "livereload": true,
         "reloaders": { // stuff to monitor for reload only
             "glob": [ "scripts/app.js", "cfc/**/*.cfc", "index.cfm", "templates/**/*.cfm" ]
@@ -144,16 +144,16 @@ var defaults = {
     },
     "committee-mail": {
         "name": "Committee Mail",
-        "root": "/Applications/ColdFusion2016/cfusion/wwwroot/amend/branches/v3.5.5/content/committee/mail/",
+        "root": "/Users/clint/working/amend/v3.5.5/content/committee/mail/",
         "livereload": true,
         "reloaders": { // stuff to monitor for reload only
-            "glob": [ "scripts/app.js", "cfc/**/*.cfc", "index.cfm", "templates/**/*.cfm" ]
+            "glob": [ "scripts/**/app.js", "cfc/**/*.cfc", "index.cfm", "templates/**/*.cfm" ]
         },
         "js": {
             "getDest": function(dir) {
                 return dir.replace('/src', '');
             },
-            "glob": "scripts/src/**/*.js"
+            "glob": "scripts/**/src/**/*.js"
         },
         "less": {
             "getDest": function(dir) {
@@ -302,7 +302,7 @@ var defaults = {
     },
     "senx": {
         "name": "Senator X",
-		"root": "/Applications/ColdFusion2016/cfusion/wwwroot/senator_x/trunk/",
+		"root": "/Users/clint/working/senatorx/",
 		"livereload": true,
         "reloaders": { // stuff to monitor for reload only
 			"glob": [ "**/*.js", "**/*.cfc", "**/*.cfm" ]
