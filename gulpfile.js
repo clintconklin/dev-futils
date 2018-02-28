@@ -142,6 +142,29 @@ var defaults = {
             "glob": "styles/**/*.less"
         }
     },
+    "committee-intranet": {
+        "name": "Committee Intranet",
+        "root": "/Users/clint/working/committee-intranet/trunk/mail/",
+        "livereload": true,
+        "reloaders": { // stuff to monitor for reload only
+            "glob": [ "scripts/**/app.js", "cfc/**/*.cfc", "index.cfm", "templates/**/*.cfm" ]
+        },
+        "js": {
+            "getDest": function(dir) {
+                return dir.replace('/src', '');
+            },
+            "glob": "scripts/**/src/**/*.js"
+        },
+        "less": {
+            "getDest": function(dir) {
+                return dir + '../';
+            },
+            "getTarget": function(dir, file) {
+                return dir + 'app.less';
+            },
+            "glob": "styles/**/*.less"
+        }
+    },
     "committee-mail": {
         "name": "Committee Mail",
         "root": "/Users/clint/working/amend/v3.5.5/content/committee/mail/",
