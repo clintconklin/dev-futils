@@ -1,5 +1,5 @@
 /*
-	TODO: add uglifyOptions (need { 'mangle': false } for angular-based stuff or it breaks injection)
+  TODO: add uglifyOptions (need { 'mangle': false } for angular-based stuff or it breaks injection)
 */
 var fs = require('fs');
 var path = require('path');
@@ -22,12 +22,12 @@ var notify = require("gulp-notify");
 var livereload = require('gulp-livereload');
 
 var defaults = {
-	"amend": {
+  "amend": {
         "name": "Amend",
         "root": "/Users/clint/working/amend/v3.5.5/",
-		"livereload": true,
-		"reloaders": { // stuff to monitor for reload only
-			"glob": [ "cfc/**/*.cfc", "index.cfm", "styles/**/*.less", "**/styles/**/*.scss" ]
+    "livereload": true,
+    "reloaders": { // stuff to monitor for reload only
+      "glob": [ "cfc/**/*.cfc", "index.cfm", "styles/**/*.less", "**/styles/**/*.scss" ]
         },
         "js": {
             "getDest": function(dir) {
@@ -43,23 +43,31 @@ var defaults = {
                 return dir + 'theme.less';
             },
             "glob": "styles/**/*.less"
-		},
-		"sass": {
-            "getDest": function(dir) {
-                return dir + '../';
-            },
-            "getTarget": function(dir, file) {
-                return dir + file;
-            },
-			"glob": "**/styles/**/*.scss"
-        }
     },
-	"clips": {
+    "sass": {
+      "getDest": function(dir) {
+        if (dir.indexOf('components') !== -1) { // carpio's schema
+          return dir + '../../../';
+        } else {
+          return dir + '../';
+        }
+      },
+      "getTarget": function(dir, file) {
+        if (dir.indexOf('components') !== -1) { // carpio's schema
+          return dir + '../../../theme.scss';
+        } else {
+          return dir + file;
+        }
+      },
+      "glob": "**/styles/**/*.scss"
+    }
+    },
+  "clips": {
         "name": "Clips",
         "root": "/Applications/ColdFusion2016/cfusion/wwwroot/clips/site/trunk/",
-		"livereload": false,
-		"reloaders": { // stuff to monitor for reload only
-			"glob": [ "cfc/**/*.cfc", "index.cfm", "styles/**/*.less", "**/styles/**/*.scss" ]
+    "livereload": false,
+    "reloaders": { // stuff to monitor for reload only
+      "glob": [ "cfc/**/*.cfc", "index.cfm", "styles/**/*.less", "**/styles/**/*.scss" ]
         },
         "js": null,
         "less": {
@@ -70,8 +78,8 @@ var defaults = {
                 return dir + 'styles.less';
             },
             "glob": "**/styles/**/*.less"
-		},
-		"sass": null
+    },
+    "sass": null
     },
     "amend-tinymce": {
         "name": "Amend - tinymce plugins",
@@ -87,7 +95,7 @@ var defaults = {
         },
         "less": null
     },
-	"committee-classified": {
+  "committee-classified": {
         "name": "Committee Classified",
         "root": "/Users/clint/working/amend/v3.5.5/content/committee/classified/",
         "livereload": true,
@@ -109,15 +117,15 @@ var defaults = {
             },
             "glob": "styles/**/*.less"
         },
-		"sass": {
-			"getDest": function(dir) {
-				return dir + '../';
-			},
-			"getTarget": function(dir, file) {
-				return dir + file;
-			},
-			"glob": "**/styles/**/*.scss"
-		}
+    "sass": {
+      "getDest": function(dir) {
+        return dir + '../';
+      },
+      "getTarget": function(dir, file) {
+        return dir + file;
+      },
+      "glob": "**/styles/**/*.scss"
+    }
     },
     "committee-hearings": {
         "name": "Committee Hearings",
@@ -188,7 +196,7 @@ var defaults = {
             "glob": "styles/**/*.less"
         }
     },
-	"committee-nominees": {
+  "committee-nominees": {
         "name": "Committee Nominees",
         "root": "/Applications/ColdFusion2016/cfusion/wwwroot/amend/branches/v3.5.5/content/committee/nominees/",
         "livereload": true,
@@ -275,26 +283,26 @@ var defaults = {
             "glob": "public/styles/**/*.less"
         }
     },
-	"fyi": {
-		"name": "Fuller Youth Institute",
-		"root": "/Users/clint/working/fyi/site/",
-		"js": null,
-		"less": {
-			"getDest": function(dir) {
-				return dir + '../';
-			},
-			"getTarget": function(dir, file) {
-				if (dir.indexOf('/client/report') !== -1) {
-					return dir + 'report.less';
-				} else if (dir.indexOf('/client') !== -1) {
-					return dir + 'theme.less';
-				} else {
-					return dir + 'common.less';
-				}
-			},
-			"glob": "**/styles/**/*.less"
-		}
-	},
+  "fyi": {
+    "name": "Fuller Youth Institute",
+    "root": "/Users/clint/working/fyi/site/",
+    "js": null,
+    "less": {
+      "getDest": function(dir) {
+        return dir + '../';
+      },
+      "getTarget": function(dir, file) {
+        if (dir.indexOf('/client/report') !== -1) {
+          return dir + 'report.less';
+        } else if (dir.indexOf('/client') !== -1) {
+          return dir + 'theme.less';
+        } else {
+          return dir + 'common.less';
+        }
+      },
+      "glob": "**/styles/**/*.less"
+    }
+  },
     "hsgac": {
         "name": "HSGAC",
         "root": "/Applications/ColdFusion2016/cfusion/wwwroot/hsgac/site/trunk/",
@@ -325,10 +333,10 @@ var defaults = {
     },
     "senx": {
         "name": "Senator X",
-		"root": "/Users/clint/working/senatorx/",
-		"livereload": true,
+    "root": "/Users/clint/working/senatorx/",
+    "livereload": true,
         "reloaders": { // stuff to monitor for reload only
-			"glob": [ "**/*.js", "**/*.cfc", "**/*.cfm" ]
+      "glob": [ "**/*.js", "**/*.cfc", "**/*.cfm" ]
         },
         "js": {
             "getDest": function(dir) {
@@ -346,34 +354,38 @@ var defaults = {
             },
             "getTarget": function(dir, file) {
                 if (dir.indexOf('themes/hirono_v1') !== -1 || dir.indexOf('themes/vitter') !== -1 || dir.indexOf('themes/casey') !== -1 || dir.indexOf('themes/kaine') !== -1 || dir.indexOf('themes/donnelly') !== -1 || dir.indexOf('themes/murphy') !== -1 || dir.indexOf('themes/heinrich') !== -1 || dir.indexOf('themes/king') !== -1) { // target file is bootstrap.less, and some less files are in an /amend subdirectory
-					return dir.replace(/\/amend/i, '') + 'bootstrap.less';
+          return dir.replace(/\/amend/i, '') + 'bootstrap.less';
                 } else {
                     return dir + 'common.less';
                 }
             },
             "glob": "themes/**/*.less"
         }
-	},
-	"ttg": {
-        "name": "The Table Group",
-        "root": "/Applications/ColdFusion2016/cfusion/wwwroot/ttg/site/trunk/",
-        "js": null,
-        "less": {
-			"getDest": function(dir) {
-                return dir + '../';
-            },
-            "getTarget": function(dir, file) {
-                return dir + 'common.less';
-            },
-            "glob": "**/styles/**/*.less"
+  },
+  "ttg": {
+    "name": "The Table Group",
+    "root": "/Users/clint/working/tablegroup/",
+    "js": null,
+    "less": {
+      "getDest": function(dir) {
+        return dir + '../';
+      },
+      "getTarget": function(dir, file) {
+        if (dir.indexOf('assessment/take') !== -1) {
+          return dir + 'assessment.less';
+        } else {
+          return dir + 'common.less';
         }
-    },
-	"ttg-client": {
+      },
+      "glob": "**/styles/**/*.less"
+    }
+  },
+  "ttg-client": {
         "name": "The Table Group Client Console",
         "root": "/Applications/ColdFusion2016/cfusion/wwwroot/ttg/site/trunk/client/",
         "js": null,
         "less": {
-			"getDest": function(dir) {
+      "getDest": function(dir) {
                 return dir + '../';
             },
             "getTarget": function(dir, file) {
@@ -382,20 +394,20 @@ var defaults = {
             "glob": "styles/**/*.less"
         }
     },
-	"wyden": {
-		"name": "Senator Wyden",
-		"root": "/Applications/ColdFusion2016/cfusion/wwwroot/wyden/site/branches/v2/",
-		"js": null,
-		"less": {
-			"getDest": function(dir) {
-				return dir + '../';
-			},
-			"getTarget": function(dir, file) {
-				return dir + 'common.less';
-			},
-			"glob": "styles/**/*.less"
-		}
-	},
+  "wyden": {
+    "name": "Senator Wyden",
+    "root": "/Applications/ColdFusion2016/cfusion/wwwroot/wyden/site/branches/v2/",
+    "js": null,
+    "less": {
+      "getDest": function(dir) {
+        return dir + '../';
+      },
+      "getTarget": function(dir, file) {
+        return dir + 'common.less';
+      },
+      "glob": "styles/**/*.less"
+    }
+  },
 };
 
 var config = null;
@@ -422,10 +434,10 @@ var setWatch = function(id, env, theme) {
         // note: the glob setting can be either a string (single filepath) or an array (of globs)
         if (env.reloaders.glob.constructor === Array) {
             env.reloaders.glob.forEach(function(expr, idx) {
-				env.reloaders.glob[idx] = env.root + ((id === 'senx' && theme) ? 'themes/' + theme + '/' : '') + expr;
-			});
-		} else {
-			env.reloaders.glob = env.root + ((id === 'senx' && theme) ? 'themes/' + theme + '/' : '' ) + env.reloaders.glob;
+        env.reloaders.glob[idx] = env.root + ((id === 'senx' && theme) ? 'themes/' + theme + '/' : '') + expr;
+      });
+    } else {
+      env.reloaders.glob = env.root + ((id === 'senx' && theme) ? 'themes/' + theme + '/' : '' ) + env.reloaders.glob;
         }
 
         gulp.watch(env.reloaders.glob, function (event) {
@@ -557,13 +569,13 @@ var setWatch = function(id, env, theme) {
             try {
                 if (typeof env.js.webpack !== 'undefined' && env.js.webpack === true) {
                     gulp.src(event.path)
-					.pipe(babel({
-						presets: [ es2015 ]
-					}))
-					.on('error', function(e) {
-						gutil.log(gutil.colors.red('babel error[' + id + ']: '), e.message);
-						this.emit('end');
-					})
+          .pipe(babel({
+            presets: [ es2015 ]
+          }))
+          .on('error', function(e) {
+            gutil.log(gutil.colors.red('babel error[' + id + ']: '), e.message);
+            this.emit('end');
+          })
                     .pipe(webpack(require(env.root + env.js.config)))
                     .on('error', notify.onError(function (e) {
                         return {
@@ -583,13 +595,13 @@ var setWatch = function(id, env, theme) {
                     .pipe(typeof env.livereload !== 'undefined' && env.livereload === true ? livereload() : gutil.noop());
                 } else {
                     gulp.src(event.path)
-					.pipe(babel({
-						presets: [ es2015 ]
-					}))
-					.on('error', function(e) {
-						gutil.log(gutil.colors.red('babel error[' + id + ']: '), e.message);
-						this.emit('end');
-					})
+          .pipe(babel({
+            presets: [ es2015 ]
+          }))
+          .on('error', function(e) {
+            gutil.log(gutil.colors.red('babel error[' + id + ']: '), e.message);
+            this.emit('end');
+          })
                     .pipe(size({
                         'title': 'dev-futils[' + id + ']: js pre-uglify',
                         'showFiles': true
