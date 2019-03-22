@@ -360,6 +360,22 @@ var defaults = {
                 }
             },
             "glob": "themes/**/*.less"
+        },
+        "sass": {
+          "getDest": function(dir) {
+            if (dir.indexOf('/components') !== -1 || dir.indexOf('/utilities') !== -1) {
+              return dir + '../../';
+            };
+
+            return dir + '../';
+          },
+          "getTarget": function(dir, file) {
+            if (dir.indexOf('/components') !== -1 || dir.indexOf('/utilities') !== -1) {
+              return dir + '../common.scss';
+            }
+            return dir + 'common.scss';
+          },
+          "glob": "themes/styles/**/*.scss"
         }
   },
   "ttg": {
@@ -518,7 +534,6 @@ var setWatch = function(id, env, theme) {
             gutil.log(gutil.colors.blue('Notice: '), 'senx theme set to ' + gutil.colors.blue(theme) + ' for LESS compilation');
         }
 
-        console.log('WATCHING', env.root + env.sass.glob);
         gulp.watch(env.root + env.sass.glob, function (event) {
             var pathArray = event.path.split('/');
             var file = pathArray[pathArray.length - 1];
@@ -526,7 +541,6 @@ var setWatch = function(id, env, theme) {
 
             try {
                 var target = env.sass.getTarget(dir, file);
-              console.log('TARGET');
                 gulp.src(target)
                 .pipe(typeof env.dev !== 'undefined' && env.dev === true ? sourcemaps.init() : gutil.noop())
                 .pipe(sass().on('error', sass.logError))
