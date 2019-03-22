@@ -514,10 +514,11 @@ var setWatch = function(id, env, theme) {
 
     if (typeof env.sass != 'undefined' && env.sass) {
         if (id == 'senx' && theme) {
-            env.less.glob = env.less.glob.replace(/themes/, 'themes/' + theme);
+            env.sass.glob = env.sass.glob.replace(/themes/, 'themes/' + theme);
             gutil.log(gutil.colors.blue('Notice: '), 'senx theme set to ' + gutil.colors.blue(theme) + ' for LESS compilation');
         }
 
+        console.log('WATCHING', env.root + env.sass.glob);
         gulp.watch(env.root + env.sass.glob, function (event) {
             var pathArray = event.path.split('/');
             var file = pathArray[pathArray.length - 1];
@@ -525,6 +526,7 @@ var setWatch = function(id, env, theme) {
 
             try {
                 var target = env.sass.getTarget(dir, file);
+              console.log('TARGET');
                 gulp.src(target)
                 .pipe(typeof env.dev !== 'undefined' && env.dev === true ? sourcemaps.init() : gutil.noop())
                 .pipe(sass().on('error', sass.logError))
