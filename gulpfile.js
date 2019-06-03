@@ -24,7 +24,7 @@ var livereload = require('gulp-livereload');
 var defaults = {
   "amend": {
         "name": "Amend",
-        "root": "/Users/clint/working/amend/v3.5.5/",
+        "root": "/Users/clint/webroot/amend/v3.5.5/",
     "livereload": true,
     "reloaders": { // stuff to monitor for reload only
       "glob": [ "cfc/**/*.cfc", "index.cfm", "styles/**/*.less", "**/styles/**/*.scss" ]
@@ -97,7 +97,7 @@ var defaults = {
     },
   "committee-classified": {
         "name": "Committee Classified",
-        "root": "/Users/clint/working/amend/v3.5.5/content/committee/classified/",
+        "root": "/Users/clint/webroot/amend/v3.5.5/content/committee/classified/",
         "livereload": true,
         "reloaders": { // stuff to monitor for reload only
             "glob": [ "scripts/app.js", "cfc/**/*.cfc", "index.cfm", "templates/**/*.cfm" ]
@@ -129,7 +129,7 @@ var defaults = {
     },
     "committee-hearings": {
         "name": "Committee Hearings",
-        "root": "/Users/clint/working/amend/v3.5.5/content/committee/hearings/",
+        "root": "/Users/clint/webroot/amend/v3.5.5/content/committee/hearings/",
         "livereload": true,
         "reloaders": { // stuff to monitor for reload only
             "glob": [ "scripts/app.js", "cfc/**/*.cfc", "index.cfm", "templates/**/*.cfm" ]
@@ -175,7 +175,7 @@ var defaults = {
     },
     "committee-mail": {
         "name": "Committee Mail",
-        "root": "/Users/clint/working/amend/v3.5.5/content/committee/mail/",
+        "root": "/Users/clint/webroot/amend/v3.5.5/content/committee/mail/",
         "livereload": true,
         "reloaders": { // stuff to monitor for reload only
             "glob": [ "scripts/**/app.js", "cfc/**/*.cfc", "index.cfm", "templates/**/*.cfm" ]
@@ -316,6 +316,45 @@ var defaults = {
             },
             "glob": "styles/less/*.less"
         }
+    },
+    "jones-intranet": {
+      "name": "Jones Intranet",
+      "root": "/Users/clint/working/jones-intranet/",
+      "livereload": true,
+      "reloaders": { // stuff to monitor for reload only
+        "glob": [ "**/*.js", "**/*.cfc", "**/*.cfm" ]
+      },
+      "js": {
+          "getDest": function(dir) {
+              return dir.replace('/src', '');
+          },
+          "glob": "**/scripts/src/**/*.js"
+      },
+      "less": {
+          "getDest": function(dir) {
+              return dir + '../';
+          },
+          "getTarget": function(dir, file) {
+              return dir + 'common.less';
+          },
+          "glob": "themes/**/*.less"
+      },
+      "sass": {
+        "getDest": function(dir) {
+          if (dir.indexOf('/components') !== -1 || dir.indexOf('/utilities') !== -1) {
+            return dir + '../../';
+          };
+
+          return dir + '../';
+        },
+        "getTarget": function(dir, file) {
+          if (dir.indexOf('/components') !== -1 || dir.indexOf('/utilities') !== -1) {
+            return dir + '../common.scss';
+          }
+          return dir + 'common.scss';
+        },
+        "glob": "themes/**/styles/**/*.scss"
+      }
     },
     "lab": {
         "name": "LA's BEST",
