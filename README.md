@@ -2,6 +2,8 @@
 
 A gulp-based less/sass/js (with uglify and webpack variants) compilation and minification utility.
 
+*NOTE* needs a rewrite for gulp 4... in the meantime run with node 6.17.1 or thereabouts
+
 ## Installation
 
 1. Clone the repo
